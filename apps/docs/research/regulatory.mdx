@@ -1,0 +1,74 @@
+---
+title: "Regulatory Landscape"
+description: "What the research found — and the explicit gap the build plan must close with counsel."
+---
+
+<Warning>
+**This is the weakest-covered area of the research and is NOT legal advice.** The question explicitly
+asked for CFTC/legal analysis, but **no verified claim conclusively resolved the US treatment** of a
+cash-settled derivative on a token-price index. What follows is the *landscape* the research did
+surface, plus the specific questions to take to counsel.
+</Warning>
+
+## The shape of the risk
+
+A cash-settled instrument whose payoff depends on a future price is, in the US, very likely a
+**derivative** (a future, swap, or option) — which pulls it into **CFTC** jurisdiction under the
+Commodity Exchange Act. The relevant signals from the research:
+
+<CardGroup cols={2}>
+<Card title="Intangibles can be commodities" icon="leaf">
+Environmental commodities (RECs, carbon) — intangible, defined-by-methodology — are treated as
+commodities under the CEA (Harvard Business Law Review). Precedent that "compute" or "token price"
+*could* qualify as a commodity.
+</Card>
+<Card title="Prediction markets are a live battleground" icon="gavel">
+2026 saw an ongoing **jurisdictional battle** over prediction markets (Holland & Knight), and
+**CME sued the CFTC** over perpetual futures in the US. The regulatory perimeter for novel
+cash-settled products is **actively contested**, not settled.
+</Card>
+</CardGroup>
+
+## Why this matters more for the perp than the voucher
+
+The regulatory exposure scales with how much the product looks like a leveraged, US-reachable
+derivative:
+
+| Product shape | Regulatory exposure | Why |
+|---|---|---|
+| **Physical voucher / bulk-purchase** | **Lowest** | It's a prepaid forward purchase of a real good (token credits). Looks like a gift card / supply contract, not a swap. |
+| **Cash-settled forward (B2B hedge)** | **Medium** | A bilateral hedge can fit swap exemptions, but structure/eligibility (ECP rules) matter. Needs counsel. |
+| **HIP‑3 perp reachable by US persons** | **Highest** | Leveraged, cash-settled, retail-reachable, deployer-run oracle. The most likely to draw CFTC attention. |
+
+<Info>
+**This is a major reason the recommended MVP is the voucher/physical path** — it lets OTE prove
+demand and build the index **while staying as far from the derivatives perimeter as possible**, then
+add cash-settled instruments with counsel and (likely) geofencing once the index is trusted.
+</Info>
+
+## Questions for counsel (carry these into `/grill-me` and beyond)
+
+<Steps>
+<Step title="Classification">
+Is a cash-settled instrument on an OTE token-price index a **future, a swap, or an option** — and
+does a physically-settled voucher avoid the classification entirely?
+</Step>
+<Step title="Venue & registration">
+What registration (DCM/SEF/FCM, or an exemption) would a cash-settled venue need? Does a B2B-only,
+**eligible-contract-participant-gated** hedge change the answer?
+</Step>
+<Step title="US-person reachability">
+For a HIP‑3 perp, does **geofencing / non-US-only** access meaningfully reduce exposure, given the
+CME-v-CFTC perpetual-futures fight?
+</Step>
+<Step title="Index governance">
+Does running a **published, rules-based index** (vs a discretionary one) help or hurt — and does
+licensing it to a *regulated* venue (the CME/ICE model) de-risk OTE itself?
+</Step>
+</Steps>
+
+<Note>
+**Net:** the research confirms the legal path is **navigable but genuinely uncertain**, and the
+uncertainty is concentrated in the on-chain/leveraged variant. Treat the regulatory analysis as an
+**open dependency**, not a solved problem — see [Open Questions](/architecture/open-questions).
+</Note>

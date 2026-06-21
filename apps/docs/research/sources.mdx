@@ -1,0 +1,64 @@
+---
+title: "Sources & Method"
+description: "Every source behind the research tab, with quality ratings and the verification method."
+---
+
+## Method
+
+<Info>
+Run 2026‑06‑20. **6 search angles** → **29 sources fetched** → **135 claims extracted** →
+**25 adversarially verified** (3-vote; a claim is killed only on 2/3 refute) → **24 confirmed, 1
+killed** → synthesized to 11 findings. Confidence labels (`high` / `medium`) reflect source quality
+and corroboration, and are preserved on each research page.
+</Info>
+
+The six angles: underlying-asset mechanics · compute-commodity analogues · perp DEX & oracle design ·
+derivatives & oracle market design · regulatory/legal exposure · contrarian feasibility (does
+volatility & hedging demand exist).
+
+## Primary sources
+
+| Source | Topic |
+|---|---|
+| [OpenRouter FAQ](https://openrouter.ai/docs/faq) | No-markup pass-through; price-change billing |
+| [OpenRouter Pricing](https://openrouter.ai/pricing) | Per-model/provider rates; input vs output |
+| [OpenRouter BYOK](https://openrouter.ai/docs/guides/overview/auth/byok) | 5% surcharge; 1M free requests/month |
+| [OpenRouter provider selection](https://openrouter.ai/docs/guides/routing/provider-selection) | Inverse-square price routing; dispersion |
+| [arXiv:2603.21690 — AI Token Futures Market](https://arxiv.org/html/2603.21690) | SIT design; 40× decline; hedging sim |
+| [CME + Silicon Data press release](https://www.cmegroup.com/media-room/press-releases/2026/5/12/cme_group_and_silicondatapartnertolaunchfirstcomputefutures.html) | First cash-settled compute futures |
+| [ICE + Ornn press release](https://ir.theice.com/press/news-details/2026/ICE-and-Ornn-to-Launch-GPU-Compute-Futures-Contracts/default.aspx) | USD cash-settled GPU futures, OCPI |
+| [Silicon Data — Silicon Index](https://www.silicondata.com/products/silicon-index) | Daily index, ~3.5M points, `SDH100RT` |
+| [HIP‑3 spec](https://hyperliquid.gitbook.io/hyperliquid-docs/hyperliquid-improvement-proposals-hips/hip-3-builder-deployed-perpetuals) | 500k HYPE stake; builder-deployed perps |
+| [HIP‑3 deployer actions](https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api/hip-3-deployer-actions) | `RegisterAsset2`, `SetOracle` ~3s |
+| [Pirrong — Cash Settlement](https://www.bauer.uh.edu/spirrong/cashset4.pdf) | Cash settlement transfers manipulation risk |
+| [Epoch AI — inference price trends](https://epoch.ai/data-insights/llm-inference-price-trends) | Corroborates secular price decline |
+| [Harvard BLR — environmental commodities under the CEA](https://journals.law.harvard.edu/hblr/the-status-of-environmental-commodities-under-the-commodity-exchange-act/) | Intangibles as CEA commodities |
+| [CFTC press release 7380‑16](https://www.cftc.gov/PressRoom/PressReleases/7380-16) | CFTC jurisdiction reference |
+| [Euronext cash-settled platform factsheet](https://www.euronext.com/sites/default/files/2021-07/52118_Cash-settled-platform_Factsheet_v05%20FINAL.pdf) | Cash-settled venue mechanics |
+
+## Secondary / industry sources
+
+| Source | Topic |
+|---|---|
+| [RedStone — Hyperliquid oracle](https://blog.redstone.finance/2025/08/21/hyperliquid/) | Oracle infra for permissionless markets |
+| [The Block — RedStone HyperSTONE](https://www.theblock.co/post/377776/redstone-launches-hyperstone-oracle-to-power-permissionless-markets-on-hyperliquid) | HIP‑3 oracle-as-a-service |
+| [Holland & Knight — prediction markets at a crossroads](https://www.hklaw.com/en/insights/publications/2026/02/prediction-markets-at-a-crossroads-the-continued-jurisdictional-battle) | Live jurisdictional battle |
+| [The Block — CME sues CFTC over perpetual futures](https://www.theblock.co/post/405286/cme-sues-cftc-over-perpetual-futures-us-accusing-agency-suddenly-changing-course) | Contested US perp perimeter |
+| [J²/Jsquare — why exotic HIP‑3 markets don't work](https://medium.com/@Jsquare_co/jsquare-research-why-exotic-hip-3-markets-dont-work-87c268309db1) | Skeptical take on niche HIP‑3 markets |
+| [Epoch AI](https://epoch.ai/data-insights/llm-inference-price-trends) · [YipitData](https://www.yipitdata.com/resources/blog/cloud-llm-pricing-trends) | Price-trend corroboration |
+| [DataStudios — OpenRouter pricing/BYOK](https://www.datastudios.org/post/openrouter-pricing-byok-routing-costs-and-cost-optimization-strategies-how-openrouter-actually-c) | Third-party fee corroboration |
+
+## Source-quality caveats
+
+<Warning>
+- **arXiv:2603.21690** is a **single-author, non-peer-reviewed preprint**; its 62–78% / 87% hedging
+  numbers are outputs of the author's *own simulation of a non-existent market*. Use the SIT *idea*,
+  not the figures.
+- **CME+Silicon Data and ICE+Ornn** were announced **~1 month before** the research and are **pending
+  regulatory review — not live**. They validate feasibility, not success.
+- **Silicon Data** is a **single-vendor proprietary** index.
+- Every strong real-world precedent tracks **GPU compute**, not **LLM tokens** — structural
+  analogues, not direct precedents.
+- [SF Compute's market docs](https://docs.sfcompute.com/current/how-the-market-works) were rated
+  **unreliable** in this pass (no verified claims extracted).
+</Warning>

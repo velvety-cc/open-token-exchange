@@ -1,0 +1,113 @@
+---
+title: "Recommended MVP"
+description: "Redeemable token-vouchers, OTE-underwritten, laid off over time. The phased plan and kill-criteria."
+---
+
+<Info>
+This page reflects decisions made in the `/grill-me` session (June 2026). The earlier "price-lock
+marketplace" framing has been superseded by the **redeemable voucher** — see
+[The Core Instrument](/architecture/instrument) and the resolution log in
+[Open Questions](/architecture/open-questions).
+</Info>
+
+<Card title="Recommendation" icon="flag-checkered">
+Ship **prepaid, on-chain, redeemable token-vouchers** ([the core instrument](/architecture/instrument))
+on a **curated set of high-volume models + a frontier basket**. **OTE underwrites the forward short
+itself** at first (the ~40× secular decline is the edge), then **lays risk off** to provider
+committed-use deals and, later, a speculator market. Position OTE as a **neutral financial layer
+across aggregators**. Drop "arbitrage" from all messaging.
+</Card>
+
+## The throughline
+
+<Note>
+**Redeemability is the product** — not the index. Because every voucher is redeemable for real
+inference, its market price is anchored by arbitrage, so OTE doesn't need a trustless settlement
+oracle to be honest ([why](/architecture/instrument#why-redeemability-dissolves-the-oracle-problem)).
+That single property is what lets the MVP be **on-chain and tradeable from day one** while keeping
+the manipulation and (much of the) regulatory risk off the table.
+</Note>
+
+## Why this sequence
+
+The research's two real risks were (1) **the index as manipulation surface** and (2) **the underlying
+may lack tradeable volatility**. The voucher design **neutralizes #1 via redeemability**, and the
+phased lay-off **contains #2** by not depending on bidirectional volatility — OTE profits from the
+*secular decline*, not from two-way price action.
+
+<Steps>
+<Step title="Phase 0 — Index + reset study (weeks 1–4)">
+Build the **OTE reference index** (multi-source, transparent) and — more importantly — measure what an
+*underwriter* needs: the **forecastability of the decline** and the **frequency & size of upward
+resets** (frontier launches, provider hikes). This sizes the discount OTE can offer and the reserves
+it must hold. See [Price Index](/architecture/price-index).
+
+<Check>This is the experiment: if upward resets are frequent and large, underwriting is dangerous and the discount must shrink — learned cheaply, before minting a single voucher.</Check>
+</Step>
+<Step title="Phase 1 — Mint & redeem vouchers (OTE underwrites)">
+Mint prepaid, collateralized, on-chain vouchers on a **curated model whitelist + frontier basket**.
+Holders **redeem** for inference (routed via OpenRouter / BYOK, later direct providers). **OTE holds
+the short**, backed by a defined **reserve/collateral model** (Q12). Proves willingness-to-pay and
+that redemption economics work after the [fee layer](/architecture/instrument).
+</Step>
+<Step title="Phase 1.5 — Secondary market (liquidity & exit)">
+List vouchers on a **secondary DEX/order book** so holders can sell before consuming. This is where
+two-sided trading and price discovery appear — **on asset-backed spot tokens, not a synthetic perp.**
+Redemption arbitrage keeps the market honest.
+</Step>
+<Step title="Phase 2 — Lay off the short to providers">
+Negotiate **committed-use discounts** with providers (or via OpenRouter), converting OTE's
+naked short into a back-to-back position. Reduces balance-sheet risk and improves the discount OTE
+can pass to buyers. Strengthens the **neutral-across-aggregators** moat.
+</Step>
+<Step title="Phase 3 — Speculator market / optional perp">
+Open the other side of the trade to speculators so hedgers' risk is absorbed by the market, not OTE.
+A HIP‑3 perp **on top of the redemption-anchored spot market** is possible here (Pyth/RedStone
+oracle, geofenced) — but only if it adds liquidity the spot market lacks. See
+[HIP‑3 path](/architecture/hip3-perp). Whether to build it at all is Q6.
+</Step>
+</Steps>
+
+## The MVP in one screen
+
+<Card title="OTE v0 — Redeemable Token-Vouchers" icon="ticket">
+**For** AI teams burning meaningful inference · **they** prepay tomorrow's lower price and stay liquid.
+
+- Pick a **model** (curated whitelist) or the **frontier basket**.
+- See OTE's **reference index** spot + the **voucher price** (below spot — the decline, passed through).
+- **Prepay** for `N` tokens at the locked rate → receive an **on-chain, collateralized voucher**.
+- **Redeem** anytime for real inference (routed under the hood), **or sell** the voucher on the
+  secondary market to exit early.
+- OTE underwrites delivery, backed by posted **reserves**.
+</Card>
+
+## What the MVP must prove (kill-criteria)
+
+<Warning>
+Kill or pivot if:
+
+1. **Upward resets are too frequent/large** — if the underwriting short blows through reserves on
+   realistic reset scenarios, OTE can't safely be the house and must wait for lay-off channels first.
+2. **No willingness-to-pay** — if cost-conscious developers won't prepay for certainty + a discount,
+   the committed-use thesis is wrong.
+3. **Redemption economics don't close** — if the all-in fee layer (5.5% / BYOK 5%, or direct rates)
+   eats the discount, the voucher has no value over buying spot.
+4. **Collateral model can't earn trust** — if holders won't believe redemption is backed, the on-chain
+   voucher has no secondary-market bid.
+5. **OpenRouter ToS** blocks reselling/fulfillment **and** no direct-provider fallback is reachable.
+</Warning>
+
+## Decision summary (from the grill)
+
+| Decision | Resolved to |
+|---|---|
+| North star | Hedging venue that earns the right to become an exchange (both, sequenced) |
+| Core instrument | **Prepaid, on-chain, redeemable token-voucher** (physical anchor + tradeable) |
+| First customer | Committed-use buyer ("Reserved Tokens") on OpenRouter's high-burn tail |
+| Contract unit | **Frontier basket + per-model curated whitelist** (combo) |
+| Counterparty | OTE underwrites first → providers → speculators (hybrid lay-off) |
+| Settlement | **Physical redemption** (anchors price) + **secondary-market exit** |
+| Index role | **Reference only** (redeemability does the heavy lifting) |
+| Pricing | **All-in** (fees + risk premium baked into the locked rate) |
+| OpenRouter | **Neutral across aggregators**; OpenRouter is fulfillment-for-now, stay portable |
+| Crypto / Hyperliquid | Returns as a **spot market in asset-backed vouchers**, not a synthetic perp |

@@ -1,0 +1,60 @@
+---
+title: "Research Summary"
+description: "The executive verdict from the June 2026 deep-research pass, with confidence levels."
+---
+
+<Info>
+**Method.** 6 search angles → 29 sources fetched → 135 claims extracted → 25 adversarially verified
+(3-vote; need 2/3 to kill). **24 confirmed, 1 killed.** Each finding below carries its confidence
+and links to the detailed page.
+</Info>
+
+## One-paragraph verdict
+
+An Open Token Exchange is **buildable but the underlying is not a true speculatable commodity**.
+OpenRouter lists provider prices with **no per-token markup**, so an oracle reading it tracks
+providers cleanly — but prices are **administratively set, multi-dimensional, and move one
+direction** (a ~40× decline 2023–2025), not the bidirectional volatility speculation needs. The
+strongest precedents are **2026 regulated compute futures** (CME+Silicon Data, ICE+Ornn) and a
+**March 2026 SIT paper**, all showing a fragmented non-deliverable compute commodity can be
+cash-settled against an independent daily index. **Hyperliquid HIP‑3** makes a synthetic perp
+feasible, but *deployer-owns-the-oracle* concentrates value and manipulation risk in the feed. The
+defensible MVP is a **cash-settled instrument or a physically-settled voucher marketplace anchored
+to a transparent multi-provider daily token-price index**; a HIP‑3 perp is fastest but carries
+oracle-trust and US regulatory risk. **Drop the arbitrage framing** — tokens are consumed, not
+resold.
+
+## Findings at a glance
+
+| # | Finding | Confidence | Detail |
+|---|---|---|---|
+| 1 | OpenRouter passes through provider prices with **no markup**; fees are a 5.5% credit top-up + 5% BYOK surcharge | High | [Underlying](/research/underlying-asset) |
+| 2 | A "token price" is a **vector** (model × provider × in/out × time), not a scalar | High | [Underlying](/research/underlying-asset) |
+| 3 | Same model served at **>3× price dispersion**; but tokens are consumed → **no riskless arbitrage** | High | [Speculatable?](/research/is-it-speculatable) |
+| 4 | Token prices fell **~40× (2023→2025)** — secular decline, not bidirectional volatility | High | [Speculatable?](/research/is-it-speculatable) |
+| 5 | **SIT** (arXiv:2603.21690) anchors a token to fixed benchmarks; sim claims 62–78% volatility cut | Medium | [Analogues](/research/analogues) |
+| 6 | **CME+Silicon Data** and **ICE+Ornn** launching cash-settled GPU compute futures (May 2026) | High | [Analogues](/research/analogues) |
+| 7 | A production **daily compute index** exists (Silicon Data, ~3.5M points/day, Bloomberg `SDH100RT`) | High | [Analogues](/research/analogues) |
+| 8 | A non-crypto underlying **can** be listed on **HIP‑3** (stake 500k HYPE, self-supply oracle) | High | [Oracles](/research/oracles-and-settlement) |
+| 9 | HIP‑3 **deployer owns the oracle** (`SetOracle` ~3s) → manipulation risk concentrated in the feed | High | [Oracles](/research/oracles-and-settlement) |
+| 10 | **Cash settlement** is correct for a non-deliverable commodity but transfers risk to the index | High | [Oracles](/research/oracles-and-settlement) |
+
+<Note>
+**Killed claim (0–3):** that HIP‑3 *requires* a "manipulation-resistant underlying with genuine
+economic significance." The docs show no such governance gate — the **500k HYPE stake is the only
+barrier**, an economic one, not an editorial one. This *helps* feasibility but *worsens* the trust
+story (anyone can list anything; nothing vets the feed).
+</Note>
+
+## What the research did NOT settle
+
+<Warning>
+Four gaps the build plan must close — these drive the [Open Questions](/architecture/open-questions):
+
+1. **Short-horizon volatility & reprice frequency** of OpenRouter per-model prices (the make-or-break
+   input for a tradeable vs hedging-only product). Not measured by any surviving claim.
+2. **US regulatory treatment** (CFTC jurisdiction, swap vs future, prediction-market precedent). The
+   question asked for it; no verified claim covered it conclusively.
+3. **Oracle manipulation-resistance** when the underlying is sourced from essentially one venue.
+4. **Demand-side willingness-to-pay** — which segment actually buys, and which instrument.
+</Warning>

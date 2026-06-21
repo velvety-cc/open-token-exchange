@@ -1,0 +1,89 @@
+---
+title: "Real-World Analogues"
+description: "Compute futures (CME, ICE), the SIT academic design, and the production daily index that proves the pattern."
+---
+
+The strongest evidence that OTE is *feasible* comes not from token markets (which don't exist yet)
+but from **compute markets that commodified in 2026**. They are structural analogues: a fragmented,
+non-deliverable compute commodity made tradeable via a cash-settled index.
+
+## 1. Regulated GPU compute futures (the precedent)
+
+<CardGroup cols={2}>
+<Card title="CME + Silicon Data" icon="building-columns">
+Announced **2026‑05‑12**. First **compute futures**, USD-denominated, **cash-settled against the
+Silicon Data benchmark index** rather than physically delivered. Covers H100/H200/B200/RTX5090
+class.
+</Card>
+<Card title="ICE + Ornn" icon="building-columns">
+Announced **2026‑05‑19**. USD-denominated, **cash-settled GPU compute futures** against the **OCPI**
+index. A major regulated exchange treating compute as a listable commodity.
+</Card>
+</CardGroup>
+
+> CME: "cash-settled against the benchmark index rather than physically delivered."
+> ICE: "U.S. dollar denominated and cash-settled."
+
+<Warning>
+**Caveats (high time-sensitivity).** Both were announced ~1 month before this research and are
+**pending regulatory review — not live trading**. They validate *feasibility and design*, not market
+success. And the underlying is **GPU compute time, not LLM tokens** — a structural analogue, not a
+direct precedent. Tokens are *administratively priced*; GPU rental is *market-cleared*.
+</Warning>
+
+## 2. The production daily index (the missing piece, already built)
+
+The hardest part of OTE — a credible daily index over a fragmented market — **already exists for
+compute** and the methodology transfers:
+
+<Card title="Silicon Data — Silicon Index" icon="chart-line">
+A **daily H100 rental index**, recalculated **every business day** from **~3.5M data points** across
+providers/regions, distributed via **Bloomberg Terminal (ticker `SDH100RT`)** and a direct API.
+Backed by DRW.
+</Card>
+
+<Info>
+**Transferable pattern for OTE:** aggregate many points daily → publish one benchmark number → ship
+it down an institutional feed path. Swap "GPU rental quotes across providers" for "token rate cards
+across providers/models." This is the blueprint for the [OTE Price Index](/architecture/price-index).
+Caveat: Silicon Data is a *single-vendor proprietary* index — OTE should aim for a *transparent,
+reproducible* methodology to differentiate on trust.
+</Info>
+
+## 3. The academic design — Standard Inference Token (SIT)
+
+<Card title="arXiv:2603.21690 — AI Token Futures Market" icon="graduation-cap">
+Proposes a **Standard Inference Token (SIT)**: a token normalized to a fixed **capability bar** —
+GPT‑4‑Turbo Jan‑2024 benchmarks (MMLU ≥ 86%, HumanEval ≥ 67%, GSM8K ≥ 92%). A Monte Carlo simulation
+claims **62–78% volatility reduction** and a 12-month cost std-dev cut from **$1.80 → $0.65 / M SIT
+(≈87%)**.
+</Card>
+
+<Warning>
+**Confidence: medium.** Single-author, **non-peer-reviewed preprint**. The headline hedging numbers
+are outputs of the author's **own simulation of a market that doesn't exist** — treat them as
+illustrative, not empirical. The durable contribution is the **SIT idea**: anchoring "a token" to a
+fixed quality bar so the price series isn't corrupted by models getting smarter. That's the single
+most reusable artifact from the academic literature.
+</Warning>
+
+## Why SIT matters for OTE specifically
+
+Without quality-normalization, your index conflates two things:
+
+1. **Price falling because inference got cheaper** (what you want to track).
+2. **Price falling because you're measuring a smarter/cheaper new model** (a units change).
+
+<Tip>
+SIT-style normalization lets OTE publish **two indices**: a raw "cheapest capable model" series
+(what buyers actually pay) and a **capability-held-constant** series (a cleaner tradeable underlying).
+The recommendation revisits this in [Price Index](/architecture/price-index).
+</Tip>
+
+## Other analogues considered
+
+- **SF Compute** — a spot/short-term GPU market; source was unreliable in this pass, so no verified
+  claims, but conceptually a *physically-settled* compute marketplace (relevant to the voucher path).
+- **Prediction markets / environmental commodities (RECs, carbon)** — precedent that *intangible,
+  defined-by-methodology* things can trade; relevant to the [Regulatory](/research/regulatory)
+  analysis.

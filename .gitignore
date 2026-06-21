@@ -1,0 +1,14 @@
+node_modules/
+.DS_Store
+*.log
+.env
+.env.*
+dist/
+build/
+.mint/
+.next/
+out/
+coverage/
+
+# local-only Claude settings
+.claude/settings.local.json

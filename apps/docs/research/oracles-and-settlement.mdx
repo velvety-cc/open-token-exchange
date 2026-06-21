@@ -1,0 +1,90 @@
+---
+title: "Oracles & Settlement"
+description: "HIP-3 makes a synthetic perp feasible — but deployer-owns-the-oracle is the make-or-break risk."
+---
+
+If OTE goes on-chain, this is the page that decides whether it's trustworthy. All findings here are
+**high confidence**.
+
+## Cash settlement is correct — and shifts all risk onto the index
+
+For a **non-deliverable software/token commodity**, you can't physically deliver the underlying at
+expiry. So you cash-settle to a reference index.
+
+> "In a cash-settled contract the settlement price at expiration is set equal to the value of some
+> reference price or index value ... delivery settlement is impractical." — Pirrong, *Cash Settlement*
+
+<Warning>
+**The trade-off (Pirrong's thesis):** cash settlement **transfers manipulation risk onto the
+reference-price determination process.** Whoever controls (or can move) the index controls
+settlement. For OTE, where the index is sourced largely from **one venue (OpenRouter)**, this is the
+central design problem — addressed in [Price Index](/architecture/price-index).
+</Warning>
+
+## HIP‑3 makes the perp *feasible*
+
+A non-crypto underlying like a token-price index **can** be listed on Hyperliquid:
+
+<Steps>
+<Step title="Stake to deploy">
+Stake **500k HYPE** to permissionlessly deploy a perp DEX (HIP‑3 live since **Oct 13 2025**). No
+governance vote, no "economic significance" gate.
+</Step>
+<Step title="Register the asset">
+Use `RegisterAsset2` / `RegisterAsset` to initialize the new DEX and register an arbitrary asset —
+e.g. `OTE-GPT5-IDX`.
+</Step>
+<Step title="Supply the oracle">
+The **deployer** defines and supplies the oracle/mark price via `SetOracle`
+(`oraclePxs` / `markPxs` / `externalPerpPxs`), expected **~every 3 seconds**.
+</Step>
+</Steps>
+
+<Check>
+**Proven at scale:** builder-deployed HIP‑3 markets hit **$790M+ open interest by Jan 2026**, led by
+gold/silver. A non-crypto-native underlying is not blocked at the protocol level. The **500k HYPE
+stake is an economic barrier, not an editorial one** (the claim that HIP‑3 *requires* a
+"manipulation-resistant underlying of genuine economic significance" was **refuted 0–3** — no such
+gate exists).
+</Check>
+
+## ...but "deployer owns the oracle" is the catch
+
+<Warning>
+On HIP‑3 the **protocol does not validate your feed.** The deployer is solely responsible for the
+oracle, pushing prices every ~3s. This **concentrates both value and manipulation risk in whoever
+lists the market.** For an underlying already sourced from essentially one venue, that's a
+double-concentration: one data source, one feed operator.
+</Warning>
+
+Mitigations surfaced by the research:
+
+| Mitigation | What it does | Source |
+|---|---|---|
+| **Pyth "HIP‑3-as-a-Service"** | A reputable oracle network operates the feed instead of you | Pyth |
+| **RedStone HyperSTONE** | Permissionless-market oracle infrastructure on Hyperliquid | RedStone / The Block |
+| **HIP‑3.1 amendment (proposed Oct 2025)** | May change oracle flexibility/mechanics — watch this | Hyperliquid |
+| **Multi-source, time-averaged methodology** | Reduce single-venue manipulability (see Price Index) | Pirrong (design) |
+
+## Decision: settlement style drives the whole risk profile
+
+<CardGroup cols={2}>
+<Card title="Cash-settled (index)" icon="coins">
+**Pros:** clean, no delivery logistics, perp-compatible, capital-efficient. **Cons:** index is the
+attack surface; CFTC exposure; trust must be manufactured. Needs a bulletproof
+[Price Index](/architecture/price-index).
+</Card>
+<Card title="Physically-settled (vouchers/credits)" icon="ticket">
+**Pros:** sidesteps oracle-manipulation and much regulatory risk; delivers a thing buyers actually
+want (cheap tokens). **Cons:** delivery/redemption plumbing; absorbs OpenRouter's 5.5%/5% fees;
+inventory & counterparty risk.
+</Card>
+</CardGroup>
+
+<Info>
+**Conclusion that flows into architecture:** because cash settlement makes the index the single
+point of failure, the **lowest-risk MVP is physically-settled (voucher) anchored to a transparent
+index for *reference only*** — you publish the index to set fair prices, but settlement doesn't
+depend on it being unmanipulable. The on-chain cash-settled perp is a **phase 2** that requires the
+index to be hardened first. See [Recommendation](/architecture/recommendation).
+</Info>

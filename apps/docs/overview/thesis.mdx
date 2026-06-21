@@ -1,0 +1,73 @@
+---
+title: "Thesis & Non-Goals"
+description: "What OTE is betting on, what it explicitly is not, and the demand-side hypothesis."
+---
+
+## The bet
+
+> Inference cost is becoming a **material, recurring line item** for AI companies, yet there is no
+> instrument to **lock it in, hedge it, or price it forward**. OTE provides that instrument as a
+> **prepaid, redeemable token-voucher** — pay tomorrow's lower price today, then redeem for real
+> inference or sell to exit.
+
+This reframes the project from a *speculation venue* to a **cost-risk-management venue** — closer
+to a fuel-hedging desk (or AWS Reserved Instances) than a meme-coin exchange. Speculation is a
+*liquidity by-product* that arrives via the voucher's secondary market, not the core value. The
+instrument is specified in [The Core Instrument](/architecture/instrument); how OTE bears and
+sheds the risk is in [Recommendation](/architecture/recommendation).
+
+## Why the original framing breaks
+
+<AccordionGroup>
+<Accordion title="“Arbitrage token prices” — not possible in the riskless sense">
+A token is **consumed at the moment of generation**. You cannot buy 1M tokens cheap on Provider A
+and resell them on Provider B. The cross-provider price dispersion that exists (>3× spread for the
+same model — see [Is it speculatable?](/research/is-it-speculatable)) is **cost-minimizing routing
+of your own consumption**, which OpenRouter already does for you. There is no resellable spread.
+</Accordion>
+<Accordion title="“Speculate on token prices” — weak because moves are one-directional">
+Capability-normalized token prices fell **~40× from 2023→2025**. That is a *secular decline*, not
+*bidirectional volatility*. A two-sided speculative market needs prices that surprise in both
+directions. A short-biased hedging product (buyers want protection against the rare *up* move; the
+trend funds the short side) is the more honest shape.
+</Accordion>
+<Accordion title="“Bulk-purchase / lock-in” — this one survives">
+Locking a forward price for a model or model-class is a **real, defensible product**. It is a
+forward/voucher, it sidesteps the need for bidirectional volatility, and it maps onto a genuine
+buyer need (budget predictability). This becomes the spine of the recommended MVP.
+</Accordion>
+</AccordionGroup>
+
+## Non-goals
+
+<Warning>
+These are explicitly **out of scope** for the MVP and should not creep back in:
+
+- **Riskless arbitrage** of token prices (structurally impossible — tokens are consumed).
+- **A non-redeemable, cash-settled derivative** as the *first* product — it would reintroduce the
+  oracle-manipulation and CFTC exposure the [redeemable voucher](/architecture/instrument) avoids.
+  (A perp may come in Phase 3, on top of the anchored spot market — see
+  [HIP‑3 path](/architecture/hip3-perp).)
+- **A naked, uncollateralized underwriting book.** OTE carries a real short; it must be backed by a
+  [reserve/collateral model](/architecture/instrument#collateralization-a-first-class-requirement).
+- **Lock-in to OpenRouter.** OTE is a [neutral layer across aggregators](/architecture/system-architecture);
+  OpenRouter is fulfillment-for-now, not the foundation.
+</Warning>
+
+## Demand-side hypothesis (unverified)
+
+The research did **not** confirm willingness-to-pay. These are the assumptions the MVP must test:
+
+| Segment | Hypothesized need | Instrument |
+|---|---|---|
+| AI startups w/ large inference bills | Budget predictability for 1–4 quarters | Fixed-price token forward / voucher |
+| Agent platforms (high token burn) | Protection against a provider price hike | Cap / call option on token price |
+| Traders / market-makers | A new uncorrelated underlying | Cash-settled index future or perp |
+| Bulk buyers | Volume discount via committed demand | Physically-settled prepaid voucher |
+
+<Info>
+The single most important unanswered question is **short-horizon volatility and reprice frequency**
+— if OpenRouter reprices a given model only every few months, an *active* market has nothing to
+trade between repricings. This is the first thing the [Open Questions](/architecture/open-questions)
+interrogates.
+</Info>

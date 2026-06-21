@@ -1,0 +1,75 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Open Token Exchange",
+  "colors": {
+    "primary": "#0E7C66",
+    "light": "#3BC9A8",
+    "dark": "#0A5C4C"
+  },
+  "favicon": "/favicon.svg",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Overview",
+        "groups": [
+          {
+            "group": "Start here",
+            "pages": [
+              "index",
+              "overview/thesis",
+              "overview/glossary"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Research",
+        "groups": [
+          {
+            "group": "Findings",
+            "pages": [
+              "research/summary",
+              "research/underlying-asset",
+              "research/is-it-speculatable",
+              "research/analogues",
+              "research/oracles-and-settlement",
+              "research/regulatory",
+              "research/sources"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Architecture",
+        "groups": [
+          {
+            "group": "Design",
+            "pages": [
+              "architecture/design-options",
+              "architecture/instrument",
+              "architecture/recommendation",
+              "architecture/price-index",
+              "architecture/system-architecture",
+              "architecture/hip3-perp",
+              "architecture/monorepo"
+            ]
+          },
+          {
+            "group": "Planning",
+            "pages": [
+              "architecture/roadmap",
+              "architecture/open-questions"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "footer": {
+    "socials": {
+      "x": "https://x.com",
+      "github": "https://github.com"
+    }
+  }
+}

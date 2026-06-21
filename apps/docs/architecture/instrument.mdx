@@ -1,0 +1,126 @@
+---
+title: "The Core Instrument"
+description: "The redeemable token-voucher — a prepaid, on-chain, collateralized claim that unifies hedging and trading."
+---
+
+<Note>
+**This is the decision that resolved the project.** Rather than choosing between a *physical voucher*
+and a *cash-settled derivative*, OTE's instrument is **both at once**: a prepaid, transferable,
+redeemable token-voucher. Physical redeemability anchors price; a secondary market provides
+liquidity and speculation. Resolved in the `/grill-me` session — see
+[Open Questions](/architecture/open-questions).
+</Note>
+
+## What a voucher is
+
+A **standardized, transferable, on-chain claim** on `N` tokens of a model (curated whitelist) or a
+**frontier basket**, prepaid at a locked rate below spot, expiring at date `D`. The holder has two
+exits:
+
+<CardGroup cols={2}>
+<Card title="Redeem" icon="bolt">
+Route real inference through OTE and consume the tokens at the **locked price**, regardless of where
+spot has moved. This is the *physical anchor* — the voucher is backed by a real, usable good.
+</Card>
+<Card title="Sell" icon="arrow-right-arrow-left">
+Transfer the voucher on a **secondary DEX market** before consuming. Exit early, take liquidity, or
+speculate. This is where two-sided trading lives — without a synthetic perp.
+</Card>
+</CardGroup>
+
+This is exactly how **deliverable commodity futures** behave: physically deliverable, but most
+holders close out on the exchange before delivery. Deliverability is what *anchors* the price; the
+exchange is what provides liquidity.
+
+## Why redeemability dissolves the oracle problem
+
+The research's central warning was that **cash settlement makes the index the manipulation surface**
+([Oracles & Settlement](/research/oracles-and-settlement)). A redeemable voucher **defuses this by
+arbitrage**, not by trusting a feed:
+
+<Steps>
+<Step title="If the voucher trades below delivery value">
+Anyone can **buy it cheap and redeem for real tokens** worth more. That buying pressure pushes the
+market price back up.
+</Step>
+<Step title="If it trades above delivery value">
+Nobody overpays when they can buy inference directly. Price falls back.
+</Step>
+<Step title="Result">
+The market price stays **tethered to the real cost of inference automatically** — because the good is
+redeemable, not because an oracle declares a number. The index becomes a **reference/UX convenience**,
+not the thing money depends on.
+</Step>
+</Steps>
+
+<Check>
+**Consequence:** OTE needs only a *transparent reference index* for the MVP, **not** a trustless,
+manipulation-proof settlement oracle. The hardened-oracle problem (and the HIP‑3 deployer-owns-the-
+feed risk) only returns if OTE later adds a **non-redeemable derivative** layer.
+</Check>
+
+## The constraint you can't engineer away
+
+<Warning>
+**Tokens can't be inventoried — they're consumed at generation** ([Underlying](/research/underlying-asset)).
+OTE *cannot* pre-buy tokens to warehouse against vouchers. On redemption, OTE sources inference at
+**that moment's spot price**. If a voucher sold at $8/M and spot is $12/M at redemption, OTE eats the
+$4. That is the **underwriting short** OTE carries — the reason the
+[counterparty lay-off](/architecture/recommendation) (provider deals → speculator market) exists.
+The voucher packages this risk cleanly; it does not remove it.
+</Warning>
+
+## Voucher economics (worked example)
+
+Spot GPT‑5 output = **$10/M**. Buyer expects to burn **600M tokens / 6 months**. OTE sells a voucher
+at **$8/M** (below spot — the expected decline, passed through).
+
+| Scenario at redemption | Buyer | OTE |
+|---|---|---|
+| Spot falls to **$6** | Redeems & consumes at $8 (overpaid vs market, but had certainty) — or sells voucher ~$6 | Sources at $6, collected $8 → **+$2/M** |
+| Spot flat at **$10** | Saved $2/M vs market | Sources at $10, collected $8 → **−$2/M**, offset by float/premium |
+| Spot **resets up to $14** (new frontier model) | Protected — redeems at $8, or sells voucher ~$14 | Sources at $14, collected $8 → **−$6/M** (the tail risk) |
+
+<Info>
+OTE's **edge** is the secular decline (most scenarios resemble row 1). OTE's **risk** is an upward
+**reset** (row 3) — which is why [position limits, curation, reserves, and lay-off](/architecture/recommendation)
+matter, and why the [Phase‑0 study](/architecture/price-index) measures *reset frequency/size*, not
+day-trading volatility.
+</Info>
+
+## Collateralization — a first-class requirement
+
+<Warning>
+Because the voucher is an **on-chain promise to deliver inference** and tokens can't be pre-bought,
+holders need assurance OTE can honor redemption. The MVP must define a **reserve / collateral model**:
+how much capital backs outstanding vouchers, where it's held, and what happens on an upward reset
+that exceeds reserves. This is tracked as a live open question (Q12) in
+[Open Questions](/architecture/open-questions).
+</Warning>
+
+## How "crypto" re-enters — healthily
+
+<Tip>
+The original instinct to use Hyperliquid / a DEX was right, but the *shape* changed. Crypto returns
+as a **spot market in asset-backed, redeemable vouchers** (fungible tokens, transferable,
+collateralized) — **not** a synthetic perp on a manipulable index. An asset-backed spot token is far
+more defensible than a bet on a number OTE controls. A HIP‑3 perp, if ever built, sits *on top* of a
+market that already has honest, redemption-anchored prices. See [HIP‑3 path](/architecture/hip3-perp).
+</Tip>
+
+## Data model (sketch)
+
+```ts
+// packages/voucher-core — the redeemable claim
+type Voucher = {
+  id: string;                 // on-chain token id
+  underlying:                 // what it delivers
+    | { kind: "model"; model: string }        // curated whitelist, e.g. "anthropic/claude-sonnet-4.x"
+    | { kind: "basket"; basket: "frontier" }; // diversified class
+  tokens: number;             // N tokens of headroom remaining
+  lockedUsdPerM: number;      // prepaid rate, below spot at mint
+  expiry: string;             // ISO8601 — use-or-settle by D
+  collateralRef: string;      // reserve backing this claim
+  state: "active" | "redeeming" | "expired" | "transferred";
+};
+```

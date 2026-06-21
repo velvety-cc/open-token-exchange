@@ -1,0 +1,85 @@
+---
+title: "Glossary"
+description: "Shared vocabulary for the rest of the docs."
+---
+
+<ResponseField name="Underlying" type="the thing being priced">
+The reference quantity a contract settles against. For OTE, a **per-model token price** (USD per
+million tokens), or an **index** of several such prices.
+</ResponseField>
+
+<ResponseField name="Token-price vector" type="model × provider × {input,output} × time">
+There is no single "price of a model." Each model is served by multiple providers, with separate
+**input (prompt)** and **output (completion)** rates, each changing over time. Any index must
+collapse this vector into a number via an explicit methodology.
+</ResponseField>
+
+<ResponseField name="SIT — Standard Inference Token" type="quality-normalized unit">
+A proposed unit (from arXiv:2603.21690) that anchors "a token" to a fixed **capability bar**
+(e.g. GPT‑4‑Turbo Jan‑2024 benchmarks) so the price series isn't corrupted by models getting
+smarter. The most transferable design idea from the academic work.
+</ResponseField>
+
+<ResponseField name="Spot" type="price now">
+The current index value. What you pay today.
+</ResponseField>
+
+<ResponseField name="Forward" type="locked price, future delivery">
+An agreement to transact at a fixed price on a future date. OTE's price-lock / bulk-purchase
+product is a forward (physically settled in token credits, or cash settled vs the index).
+</ResponseField>
+
+<ResponseField name="Future" type="standardized, exchange-listed forward">
+A forward standardized for contract size/expiry and traded on a venue. CME+Silicon Data and
+ICE+Ornn compute futures (2026) are the closest real-world analogue.
+</ResponseField>
+
+<ResponseField name="Perp — perpetual future" type="no-expiry future, funding-rate anchored">
+A future with no expiry that tracks spot via a periodic **funding rate**. Hyperliquid's core
+instrument; deployable permissionlessly via HIP‑3.
+</ResponseField>
+
+<ResponseField name="Cash settlement" type="pay the difference, no delivery">
+Settle to a reference index value rather than delivering the underlying. Correct for a
+non-deliverable software commodity — but it makes **the index the locus of value and manipulation
+risk**.
+</ResponseField>
+
+<ResponseField name="Voucher (redeemable token-voucher)" type="OTE's core instrument">
+A prepaid, transferable, on-chain, collateralized claim on `N` tokens of a model (curated whitelist)
+or a **frontier basket**, locked below spot. The holder can **redeem** it for real inference *or*
+**sell** it on a secondary market. Redeemability anchors its price by arbitrage, which is why OTE
+needs only a *reference* index, not a trustless settlement oracle. See
+[The Core Instrument](/architecture/instrument).
+</ResponseField>
+
+<ResponseField name="Reserved Tokens" type="the product analogy">
+The mental model for the voucher: **AWS Reserved Instances / committed-use discounts, but for LLM
+tokens.** Commit to volume, get a below-spot rate and a predictable bill.
+</ResponseField>
+
+<ResponseField name="Underwriting short" type="OTE's position">
+Because tokens can't be inventoried, when OTE sells a below-spot voucher it is effectively **short
+the forward token price** — it must source inference at redemption-time spot. OTE carries this at
+first (the secular decline is the edge), then **lays it off** to provider deals and speculators.
+</ResponseField>
+
+<ResponseField name="Physical settlement" type="deliver the good">
+For OTE this means delivering **token credits / a redeemable voucher** rather than cash. Sidesteps
+much oracle and regulatory risk.
+</ResponseField>
+
+<ResponseField name="Oracle" type="on-chain price feed">
+The mechanism that brings the off-chain token price on-chain. On HIP‑3 the **deployer supplies the
+oracle** (`SetOracle` ~every 3s). Whoever owns the feed owns the manipulation surface.
+</ResponseField>
+
+<ResponseField name="HIP‑3" type="Hyperliquid builder-deployed perpetuals">
+The Hyperliquid mechanism (live Oct 2025) letting anyone staking **500k HYPE** deploy a perp DEX
+and register arbitrary assets, supplying their own oracle.
+</ResponseField>
+
+<ResponseField name="BYOK — Bring Your Own Keys" type="OpenRouter feature">
+Routing requests through your own provider API keys. OpenRouter charges a **5% surcharge** of the
+normal cost (first 1M requests/month free). Relevant to OTE's physical-settlement economics.
+</ResponseField>

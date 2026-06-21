@@ -1,0 +1,84 @@
+---
+title: "Is It Speculatable?"
+description: "The two findings that reshape the whole project: no arbitrage, and one-directional decline."
+---
+
+This page is the project's reality check. Two **high-confidence** findings undercut the original
+"arbitrage and speculate" pitch. Neither kills the project — but they redirect it.
+
+## Finding 1 — There is no riskless arbitrage
+
+The cross-provider price spread is real (>3×, see [Underlying](/research/underlying-asset)), but:
+
+<Warning>
+**A token is consumed at the moment of generation.** You cannot buy tokens cheap from one provider
+and resell them. The "spread" is **cost-minimizing routing of your own consumption** — which the
+aggregator already does automatically. There is no inventory to carry, no resale leg, no riskless
+round-trip.
+</Warning>
+
+What people call "arbitrage" here is really one of:
+
+- **Routing** — picking the cheapest endpoint for your own request (OpenRouter does this).
+- **Basis trading** — betting the *gap* between two price series converges/diverges (real, but
+  requires a tradeable instrument on *each* leg — which doesn't exist yet, and OTE would have to
+  create it).
+
+<Tip>
+**Design consequence:** strike the word "arbitrage" from the product. The honest verbs are
+**hedge**, **lock-in**, and **speculate on direction**.
+</Tip>
+
+## Finding 2 — Prices fall in one direction
+
+Capability-normalized LLM output token prices fell **~40×** in roughly two years:
+
+| When | Approx. output price (capability-normalized) |
+|---|---|
+| Early 2023 | ~$60 / M tokens |
+| Early 2025 | < $1.50 / M tokens |
+
+> "Token prices fell from approximately $60 per million ... to less than $1.5 ... a more than
+> 40‑fold reduction." — arXiv:2603.21690, corroborated by [Epoch AI](https://epoch.ai/data-insights/llm-inference-price-trends)
+> and a16z's "LLMflation."
+
+<Warning>
+This is a **secular decline**, not **bidirectional volatility**. A healthy two-sided speculative
+market needs prices that surprise *both* ways. A market where everyone knows the trend is *down*
+is structurally **short-biased**: longs have to be paid (via funding/discount) to take the other
+side.
+</Warning>
+
+### Why a hedging product still works on a falling underlying
+
+A one-directional underlying is **fine for hedging** even though it's weak for speculation:
+
+- **Buyers of inference** fear the *rare up-move* (a provider hikes, or a new frontier model is
+  expensive). They'll pay a premium for a **price cap / fixed-price forward**.
+- **The downward trend funds the short side** — sellers of protection collect the secular decline as
+  carry. This is a coherent, fundable market structure (similar to selling insurance on a risk that
+  usually doesn't fire).
+
+<Info>
+**The unmeasured variable that decides everything: short-horizon volatility & reprice frequency.**
+The 40× figure is a *long-run capability-normalized* trend. It says nothing about whether a *given*
+model's price wiggles day-to-day. If OpenRouter reprices a specific model only every few months, an
+*active trading* venue has nothing to do between repricings, and OTE collapses to a *forward/voucher*
+product. **Measuring this is task #1** — see [Open Questions](/architecture/open-questions).
+</Info>
+
+## Net effect on the product shape
+
+<CardGroup cols={3}>
+<Card title="Speculation venue" icon="dice">
+**Weakened.** One-directional + possibly low reprice frequency. Viable only if short-horizon vol is
+real and a liquid index exists.
+</Card>
+<Card title="Hedging / price-lock" icon="shield">
+**Strengthened.** Coherent even on a falling underlying; maps to a real buyer fear. The spine of the
+MVP.
+</Card>
+<Card title="Arbitrage" icon="ban">
+**Dropped.** Structurally impossible — tokens are consumed, not resold.
+</Card>
+</CardGroup>

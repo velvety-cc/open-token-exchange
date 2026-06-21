@@ -1,0 +1,125 @@
+---
+title: "Open Questions"
+description: "The live decision tree — resolved via a /grill-me interview and folded back into the plan."
+---
+
+<Note>
+These are the decisions standing between this plan and a build. The `/grill-me` session (June 2026)
+resolved the Tier-1 and most product-shape questions — see the **Resolution log** at the bottom. The
+biggest outcome: the [redeemable voucher](/architecture/instrument) collapsed the
+physical-vs-cash-settled fork, so several questions were *dissolved* rather than merely answered.
+Remaining open items are marked **OPEN** below.
+</Note>
+
+## Tier 1 — make-or-break (answer first)
+
+<AccordionGroup>
+<Accordion title="Q1 · Is there enough price movement to trade at all?">
+The research never measured **short-horizon volatility or reprice frequency** of OpenRouter
+per-model prices. If models reprice rarely and barely move between, there is no active market — only
+occasional bulk-buying.
+
+**Decides:** whether OTE is a *trading venue* or merely a *forward/voucher shop*.
+**How to resolve:** the Phase-0 index *is* the experiment — but for the plan, you need a prior:
+*do you believe token prices move enough intra-quarter to trade, or are you betting purely on
+price-lock demand?*
+</Accordion>
+<Accordion title="Q2 · What's the regulatory posture and jurisdiction?">
+US treatment of a cash-settled token-price derivative is **unresolved** and the perpetual-futures
+perimeter is contested (CME v. CFTC).
+
+**Decides:** whether cash settlement / perps are even on the table, and where users can be.
+**Options:** (a) physical-only, avoid the perimeter; (b) B2B cash forwards with ECP gating + counsel;
+(c) non-US / geofenced perp. *Which appetite are you building for?*
+</Accordion>
+<Accordion title="Q3 · Who is the first customer, and what do they actually buy?">
+Demand-side willingness-to-pay is **unverified**. Candidate segments: high-burn AI startups, agent
+platforms, traders, bulk buyers — each wants a different instrument.
+
+**Decides:** the MVP's exact shape (price-lock vs prepaid voucher vs cap/option).
+**Need:** a concrete first-customer hypothesis to design the v0 against.
+</Accordion>
+</AccordionGroup>
+
+## Tier 2 — product shape
+
+<AccordionGroup>
+<Accordion title="Q4 · Per-model or model-class as the primary unit?">
+Trade `OTE-GPT5` specifically, or a class like `OTE-FRONTIER` / `OTE-CHEAP-BULK`? Classes are more
+liquid and robust to any single model dying; per-model is more precise for a buyer hedging a specific
+dependency. Probably offer both, but **which leads the MVP?**
+</Accordion>
+<Accordion title="Q5 · Raw price or SIT-capability-normalized as the headline index?">
+The raw "cheapest capable model" series is what buyers pay; the SIT-normalized series is a cleaner
+tradeable underlying. **Which is the flagship**, and is the other a secondary view?
+</Accordion>
+<Accordion title="Q6 · Is the HIP-3 perp in scope at all?">
+The perp is the riskiest, most-regulated, last phase. Is OTE ultimately a **two-sided trading
+exchange** (perp belongs) or a **pure hedging/price-lock venue** (perp may never belong)? This
+reframes the whole north star.
+</Accordion>
+<Accordion title="Q7 · Physical settlement economics — who eats the fee layer?">
+Physical redemption runs through OpenRouter's 5.5% credit + 5% BYOK fees. Does the **buyer** pay it
+(thinner value prop), does **OTE** absorb it (margin), or does the lock price **bake it in**?
+</Accordion>
+</AccordionGroup>
+
+## Tier 3 — build & trust
+
+<AccordionGroup>
+<Accordion title="Q8 · How many price sources before settlement trusts the index?">
+OpenRouter alone is a single-venue dependency. **Minimum source count** and which (other aggregators?
+direct provider rate cards?) before the index is allowed to settle money?
+</Accordion>
+<Accordion title="Q9 · Self-run vs third-party oracle (if on-chain)?">
+For a perp, self-running `SetOracle` concentrates trust badly. Commit to **Pyth / RedStone** from day
+one of Phase 3, or evaluate self-operation? (Recommendation: never self-run.)
+</Accordion>
+<Accordion title="Q10 · OpenRouter dependency & ToS risk">
+OTE leans heavily on OpenRouter for both **pricing data** and **physical fulfillment**. Is there ToS
+risk in reselling credits / building a market on their prices? Is a **direct-provider** fallback
+needed? Does OpenRouter become a partner, a dependency, or a competitor?
+</Accordion>
+<Accordion title="Q11 · Trust & governance of the index">
+A trusted index is the moat. Does it need an **independent methodology committee**, third-party
+audit, or licensing to a regulated venue (the CME/ICE model) to be credible — or is open,
+reproducible computation enough?
+</Accordion>
+</AccordionGroup>
+
+## Resolution log
+
+<Check>
+Resolved in the `/grill-me` session, 2026‑06‑20. The keystone decision — the
+[redeemable voucher](/architecture/instrument) — dissolved the hardest forks (physical vs cash, and
+the oracle-manipulation risk) rather than just answering them.
+</Check>
+
+| # | Question | Resolved to | Updated page |
+|---|---|---|---|
+| North star | Trading exchange or hedging venue? | **Both, sequenced** — hedging venue that earns the right to become an exchange | [Thesis](/overview/thesis), [Roadmap](/architecture/roadmap) |
+| Q3 | First customer & instrument | **Committed-use buyer** ("Reserved Tokens") on OpenRouter's high-burn tail | [Recommendation](/architecture/recommendation) |
+| — | Physical vs cash settlement | **Dissolved** → a *redeemable voucher* that is both: redeem for tokens **or** sell on a secondary market | [Instrument](/architecture/instrument) |
+| Counterparty | Who is short the token price? | **OTE underwrites first → providers → speculators** (hybrid lay-off) | [Instrument](/architecture/instrument), [Recommendation](/architecture/recommendation) |
+| Q4 | Per-model vs class | **Combo** — frontier basket **+** per-model curated whitelist | [Instrument](/architecture/instrument) |
+| Q5 | Raw vs SIT index | **Raw** per-model/basket for traded vouchers; SIT published as an analytics overlay only | [Price Index](/architecture/price-index) |
+| Q1 | Enough volatility to trade? | **Reframed** — underwriter needs *decline forecastability* + *reset frequency/size*, not day-trading vol | [Price Index](/architecture/price-index) |
+| Q6 | Is the HIP‑3 perp in scope? | **Maybe, Phase 3** — only if it adds liquidity *on top of* the redemption-anchored spot market | [HIP‑3 path](/architecture/hip3-perp) |
+| Q7 | Who eats the fee layer? | **All-in pricing** — fees + risk premium baked into the locked rate | [Instrument](/architecture/instrument) |
+| Q8 / Q9 / Q11 | Index sources / oracle / governance | **Low-stakes for MVP** — redeemability anchors price; transparent reference index suffices | [Instrument](/architecture/instrument), [Price Index](/architecture/price-index) |
+| Q10 | OpenRouter dependency | **Neutral across aggregators**; OpenRouter is fulfillment-for-now, architecture stays portable | [System](/architecture/system-architecture) |
+| Q2 | Regulatory posture | Voucher is a **prepaid, redeemable, asset-backed** claim (utility, not a swap); confirm with counsel before scaling. *(See OPEN below.)* | [Regulatory](/research/regulatory) |
+
+### Still OPEN
+
+<Warning>
+- **Q12 (NEW) · Collateral / reserve model.** Since tokens can't be inventoried, holder trust in
+  redemption depends on **how much capital backs outstanding vouchers, where it's held, and what
+  happens when an upward reset exceeds reserves.** A first-class design constraint —
+  [Instrument](/architecture/instrument#collateralization-a-first-class-requirement).
+- **Q2′ · Securities/commodities counsel.** A *transferable, on-chain, prepaid claim* people may buy
+  to resell at a profit needs a real legal read (utility token vs investment contract vs commodity).
+  The redeemable/utility anchor helps, but get the memo before the secondary market goes live.
+- **Q1′ · Empirical reset study.** The Phase‑0 measurement of decline-forecastability and reset
+  frequency/size is still unrun — it gates how aggressive the underwriting discount can be.
+</Warning>

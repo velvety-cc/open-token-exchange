@@ -1,0 +1,87 @@
+---
+title: "The Underlying Asset"
+description: "What an OpenRouter token price actually is — and why it's a vector, not a number."
+---
+
+Everything downstream (index, contract, oracle, settlement) depends on getting this right. The
+research findings here are all **high confidence**, cited to OpenRouter's own docs.
+
+## OpenRouter is a pass-through, not a market-maker
+
+<Check>
+**OpenRouter does not mark up provider token pricing.** The listed per-endpoint price equals the
+provider's price.
+</Check>
+
+> "We pass through the pricing of the underlying providers without any markup." — OpenRouter FAQ
+
+This is **good news for an oracle**: a feed reading OpenRouter's listed prices faithfully tracks the
+underlying providers. It means OTE's index isn't measuring OpenRouter's margin — it's measuring the
+real provider economics.
+
+Where OpenRouter *does* make money (these sit **outside** the token rate, and matter for settlement
+economics):
+
+| Fee | Rate | Notes |
+|---|---|---|
+| Pay-as-you-go credit top-up | **5.5%** | 5.0% for crypto; **$0.80 minimum** |
+| BYOK surcharge | **5%** of normal cost | First **1M requests/month free**; deducted from credits |
+
+<Info>
+**Implication for OTE.** If OTE physically settles in token credits, the **5.5% credit fee and 5%
+BYOK surcharge are a real cost layer** that the contract's economics must absorb or pass on. If OTE
+cash-settles against the listed *rate*, the fees are irrelevant to the index but relevant to anyone
+who hedges a real bill (basis between "listed rate" and "all-in cost"). Sources:
+[FAQ](https://openrouter.ai/docs/faq), [Pricing](https://openrouter.ai/pricing),
+[BYOK](https://openrouter.ai/docs/guides/overview/auth/byok).
+</Info>
+
+## A "token price" is a vector, not a scalar
+
+The single biggest modeling constraint. A per-model price is well-defined but multi-dimensional:
+
+```
+price = f(model, provider, {input | output}, time)
+```
+
+- **Per model and per provider** — distinct per-million rates.
+- **Input vs output** — prompt and completion tokens are billed at **different** rates.
+- **Over time** — prices change; when they do, **you are billed at the new rate** immediately.
+
+<Warning>
+There is **no canonical "price of GPT‑5."** Any contract must specify exactly which slice of this
+vector it settles against, or define an **explicit aggregation** (e.g. a weighted blend of the
+cheapest N providers, input+output combined in a fixed ratio). This is the core job of the
+[Price Index](/architecture/price-index).
+</Warning>
+
+## Cross-provider dispersion is real (but not arbitrage)
+
+The same model is served **simultaneously** at a wide spread. Verified example — Llama 3.3 70B
+**output** pricing:
+
+| Provider | Output $/M |
+|---|---|
+| DeepInfra | $0.32 |
+| Groq | $0.79 |
+| Together | $1.04 |
+| (some endpoints) | **> $2.00** |
+
+That's a **>3× spread for an identical model**. OpenRouter routes across these dynamically
+(inverse-square-of-price load balancing). It *looks* like an arbitrage, but it isn't — see
+[Is it speculatable?](/research/is-it-speculatable) for why the "consumed on generation" property
+kills riskless arbitrage. For OTE the dispersion matters because **the index must decide which
+providers it tracks** (cheapest? median? a defined basket?).
+
+## What this means for the design
+
+<CardGroup cols={2}>
+<Card title="Clean to oracle" icon="circle-check">
+No markup → the feed measures real provider economics. One transparent data source
+(OpenRouter's public model/pricing API) covers most of the market.
+</Card>
+<Card title="Hard to scalarize" icon="triangle-exclamation">
+The vector must be collapsed by an explicit, defensible methodology, or every contract argues about
+"which price." This is a design liability *and* the moat (a trusted index).
+</Card>
+</CardGroup>

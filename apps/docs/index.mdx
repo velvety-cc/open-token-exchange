@@ -1,0 +1,80 @@
+---
+title: "Open Token Exchange"
+description: "A secondary market for LLM inference tokens — research, feasibility, and architecture."
+---
+
+<Note>
+This documentation is a **research + architecture planning artifact**, not a shipped product. It
+captures a deep-research pass (June 2026) and a concrete build plan. Open design questions are
+collected in [Open Questions](/architecture/open-questions) and are resolved via a structured
+`/grill-me` interview.
+</Note>
+
+## What is Open Token Exchange?
+
+**Open Token Exchange (OTE)** is a proposed venue for **pricing, hedging, and speculating on the
+cost of LLM inference tokens** — the per-million-token rates that models like GPT‑5, Claude, and
+Llama derivatives are sold at on aggregators such as [OpenRouter](https://openrouter.ai).
+
+The original pitch had three jobs:
+
+1. **Arbitrage** token prices across providers/models.
+2. **Speculate** on where token prices go.
+3. **Bulk-purchase / lock-in** a price for a model or class of models (a forward).
+
+Deep research changed the framing. The honest one-line verdict:
+
+<Card title="Verdict" icon="scale-balanced">
+OTE is **buildable**, but the underlying is **not a classic speculatable commodity**. Token prices
+are administratively set, multi-dimensional, and have moved in *one direction* (a ~40× decline,
+2023–2025). So the product isn't a casino — it's a venue that sells **certainty**. The
+`/grill-me` session landed on the instrument that makes this work: a **prepaid, on-chain, redeemable
+token-voucher** — redeem it for real inference *or* sell it on a secondary market. Redeemability
+anchors the price by arbitrage, which **dissolves the oracle-manipulation problem**. OTE underwrites
+the position at first (the secular decline is the edge) and lays risk off over time. The "arbitrage"
+framing is dropped: **tokens are consumed on generation, not resold.** → [The Core
+Instrument](/architecture/instrument).
+</Card>
+
+## Why this is interesting anyway
+
+Two things make the timing good rather than crazy:
+
+<CardGroup cols={2}>
+<Card title="Compute commodified in 2026" icon="server">
+CME+Silicon Data and ICE+Ornn both announced **cash-settled GPU compute futures** against
+independent daily indices in May 2026. A fragmented, non-deliverable compute commodity *can*
+underlie exchange-listed derivatives. See [Analogues](/research/analogues).
+</Card>
+<Card title="Permissionless perp rails exist" icon="link">
+Hyperliquid **HIP‑3** (live Oct 2025) lets anyone staking 500k HYPE deploy a perp market with a
+**self-supplied oracle**. A "token-price index" perp is not blocked at the protocol level — but the
+deployer owns the feed, which is the central risk. See [HIP‑3 path](/architecture/hip3-perp).
+</Card>
+</CardGroup>
+
+## How to read these docs
+
+<Steps>
+<Step title="Research">
+Start with the [Research summary](/research/summary). It walks through what the underlying actually
+is, whether it can be speculated on, the real-world analogues, and the oracle/regulatory problems.
+Every claim is cited and was adversarially verified (3-vote).
+</Step>
+<Step title="Architecture">
+[Design options](/architecture/design-options) compares the three product shapes, then
+[The Core Instrument](/architecture/instrument) shows how the **redeemable voucher** unifies them.
+The [Recommendation](/architecture/recommendation) lays out the phased MVP (underwrite → lay off),
+and [Price Index](/architecture/price-index) specifies the reference index.
+</Step>
+<Step title="Open questions">
+[Open Questions](/architecture/open-questions) is the live decision tree. These are resolved in a
+`/grill-me` session and folded back into the architecture.
+</Step>
+</Steps>
+
+<Info>
+**Provenance.** The research tab is derived from a fan-out web-research pass run on 2026‑06‑20:
+6 search angles → 29 sources fetched → 135 claims extracted → 25 adversarially verified (24
+confirmed, 1 killed). Confidence levels and citations are preserved on each page.
+</Info>

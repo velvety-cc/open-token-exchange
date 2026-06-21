@@ -1,0 +1,104 @@
+---
+title: "Design Options"
+description: "The three product shapes OTE could take, scored against the research."
+---
+
+<Note>
+**Resolved:** the `/grill-me` session found these three shapes don't have to be a choice. A
+**redeemable voucher** is *physically settled* (option A) yet *tradeable on a secondary market*
+(the liquidity of option C) — so it captures A's safety and C's liquidity while sidestepping the
+cash-settled oracle risk of B/C. Read this page for the trade-off analysis, then see
+[The Core Instrument](/architecture/instrument) for the synthesis the MVP actually builds.
+</Note>
+
+The research collapses the design space to **three viable shapes**. They are not mutually exclusive —
+the [Recommendation](/architecture/recommendation) sequences them, and the
+[redeemable voucher](/architecture/instrument) fuses A and C — but each has a distinct risk profile.
+
+## The three options
+
+<CardGroup cols={3}>
+<Card title="A · Voucher Marketplace" icon="ticket">
+**Physically settled.** Buy/sell prepaid token credits or fixed-price forwards, redeemable for real
+inference. A "gift card + forward" for tokens.
+</Card>
+<Card title="B · Cash-Settled Forward" icon="file-contract">
+**Off-chain, B2B.** A bilateral hedge: lock a token price for a quarter, settle the cash difference
+vs the OTE index at expiry. A fuel-hedge for inference.
+</Card>
+<Card title="C · HIP‑3 Synthetic Perp" icon="chart-candlestick">
+**On-chain, leveraged.** Deploy a perp on Hyperliquid tracking the OTE token-price index; trade it
+with funding-rate mechanics. Fastest to liquidity, highest risk.
+</Card>
+</CardGroup>
+
+## Scorecard
+
+Scored 1–5 (5 = best) against the dimensions the research flagged as decisive.
+
+| Dimension | A · Voucher | B · Cash Forward | C · HIP‑3 Perp |
+|---|:--:|:--:|:--:|
+| Time-to-ship | 4 | 3 | **5** |
+| Oracle-manipulation safety | **5** | 3 | 1 |
+| Regulatory safety (US) | **5** | 3 | 1 |
+| Works on 1-directional underlying | **5** | 4 | 2 |
+| Tolerates low reprice frequency | **5** | 4 | 1 |
+| Liquidity / two-sided trading | 2 | 3 | **5** |
+| Maps to a proven buyer need | **5** | 4 | 2 |
+| Capital efficiency for traders | 1 | 3 | **5** |
+| **Total** | **32** | **27** | **22** |
+
+<Info>
+**Why A wins the scorecard.** It is robust to the *two findings that actually threaten the project*
+— no bidirectional volatility required, and immune to oracle manipulation because settlement is
+**delivery of a real good**, not a payout against an index. It also stays farthest from the
+derivatives perimeter. Its weakness (thin two-sided trading) is exactly what C is good at — hence
+the phased plan.
+</Info>
+
+## How each option handles the research's hard constraints
+
+<AccordionGroup>
+<Accordion title="Constraint: tokens are consumed → no arbitrage">
+- **A** embraces it — you're selling *delivery of consumption rights*, not a resale spread. ✅
+- **B** embraces it — cash hedge, no resale assumed. ✅
+- **C** embraces it — synthetic exposure, never touches real tokens. ✅
+
+All three survive; the arbitrage framing is simply dropped everywhere.
+</Accordion>
+<Accordion title="Constraint: one-directional ~40× decline">
+- **A** — forwards priced off the curve naturally embed the decline; buyers pay for *certainty*, not
+  for an up-bet. ✅
+- **B** — short side collects the decline as carry; coherent. ✅
+- **C** — a perpetually-declining mark makes the perp structurally short-heavy; longs must be
+  subsidized via funding. Workable but awkward, and thin longs hurt liquidity. ⚠️
+</Accordion>
+<Accordion title="Constraint: index = manipulation surface (cash settlement)">
+- **A** — *no settlement oracle needed.* The index is used only as a **reference price** to set fair
+  forward quotes; manipulating it doesn't steal money. ✅✅
+- **B** — settlement depends on the index; needs a hardened, multi-source methodology + dispute
+  window. ⚠️
+- **C** — deployer-run HIP‑3 oracle on a single-venue underlying = worst case. Needs Pyth/RedStone +
+  multi-source index before it's trustworthy. ❌ until hardened.
+</Accordion>
+<Accordion title="Constraint: US regulatory uncertainty">
+- **A** — looks like a prepaid supply contract, not a swap. Lowest exposure. ✅
+- **B** — bilateral swap; needs counsel + likely ECP gating. ⚠️
+- **C** — leveraged, retail-reachable, contested perimeter. Highest exposure; likely geofence. ❌ for
+  US.
+</Accordion>
+</AccordionGroup>
+
+## The thread that ties them together
+
+<Note>
+**All three need the same core asset: a trusted, transparent, multi-provider token-price index.**
+- In **A** it sets fair quotes.
+- In **B** it is the settlement reference.
+- In **C** it is the oracle feed.
+
+So the index is the **first thing to build regardless of which product ships** — and building it
+inside the low-stakes voucher product (where a wrong number costs a mispriced quote, not a stolen
+settlement) is the safest way to harden it. This is the core logic of the
+[Recommendation](/architecture/recommendation).
+</Note>
