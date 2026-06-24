@@ -1,0 +1,102 @@
+---
+title: "The Index Engine (v0)"
+description: "The pinned economy-batch band and the cheapest-to-deliver engine that prints it — the settlement-oracle primitive, built reference-grade first."
+---
+
+<Note>
+**This is the v0 build.** Design converged on a capability-banded, cheapest-to-deliver
+index for a standardized economy-batch token, settled over a basket of **open-weight**
+models. It supersedes the single-model voucher framing for the index: a basket
+**self-heals** when a model is deprecated mid-tenor (the successor qualifies in, the
+basket rolls), which the single-model voucher could not. Lives in
+[`packages/index-core`](/architecture/monorepo). Built **reference-grade**, not
+settlement-grade — see [Deferred](#deferred-on-purpose).
+</Note>
+
+## Why an index at all
+
+The index is the primitive every future product shape references: a startup bulk-buying
+a forward, a cash-settled token future, a price-lock. Build it once, reuse it everywhere.
+The trust grade each shape demands differs (a physically-settled forward only needs a
+reference price; a cash-settled derivative needs a manipulation-resistant oracle), so v0
+builds the reference-grade version and hardens later, per the product actually chosen.
+
+## The pinned v0 band: `OTE-ECON-BATCH`
+
+One standardized good. Fix capability grade + service class + reference workload; let
+price, vendor, and throughput float. The band config is data, not code
+(`config/econ-batch.band.json`) — every value below is overridable.
+
+| Dimension | v0 value |
+|---|---|
+| **Universe** | Open-weight only (closed frontier excluded) |
+| **Service class** | Batch / best-effort, completion within 24h, no latency SLA |
+| **Reference workload** | 3:1 input:output blend, 8k context, unconstrained decoding, seeds pinned |
+| **Reference unit** | USD per 1M output-equivalent **characters** (tokenizer-normalized) |
+| **Gating axes (AND)** | instruction-following, structured-output validity, factuality/faithfulness, routine code, long-context retention |
+| **Monitored (non-gating)** | safety / refusal calibration |
+| **Thresholds** | `t_in 0.70 / t_out 0.65` — **v0 placeholders, calibrate from a first baseline run** |
+| **Availability gate** | K = 2 vendors servable at scale |
+| **Review cadence** | Monthly basket review + monthly held-out rotation |
+
+<Info>
+**Thresholds are deliberately not "decided" yet.** Setting `t_in`/`t_out` in the abstract
+is guessing. They get calibrated from a first baseline eval run over known-good economy
+models, then frozen and versioned. Everything else is pinned.
+</Info>
+
+## How the engine prints a number
+
+Pure and deterministic: `(observations, band) -> one print`. Same inputs, same print.
+
+<Steps>
+<Step title="Gate the basket">
+Conjunctive capability gates (a model must clear **every** axis, not a weighted average
+it can trade off), with **hysteresis** (incumbents held to the lower `t_out`, new
+entrants to the higher `t_in`) so the basket does not flicker. Then an **availability
+gate**: only models servable at scale from >= K vendors can enter — a model nobody hosts
+cannot be cheapest-to-deliver.
+</Step>
+<Step title="Price each route">
+For every qualifying `(model, endpoint)`: blend input/output at the 3:1 reference ratio
+into an **output-equivalent** price (`output + 3 x input`), then **tokenizer-normalize**
+by dividing by the model's chars-per-token. This is the conversion-factor analog from
+Treasury futures: it stops a model looking cheap just because its tokenizer is greedy or
+its input price is low relative to the workload.
+</Step>
+<Step title="Take cheapest-to-deliver">
+The print is the cheapest qualifying route on the normalized unit. The full sorted
+ladder, the qualifying basket, and every admit/drop reason are emitted alongside for
+audit and reproducibility.
+</Step>
+</Steps>
+
+## Example print
+
+Run `node src/cli.js` (illustrative seed data — placeholder scores and prices):
+
+```
+OTE-ECON-BATCH  —  Economy-batch, open-weight  (ote-idx@0.1.0)
+PRINT:  0.318421 USD / 1M output-equivalent chars
+        cheapest-to-deliver = deepseek/deepseek-v3.2 @ deepinfra
+qualifying basket (4): deepseek-v3.2, llama-3.3-70b, qwen2.5-72b, glm-4.6
+excluded:
+  - mistral-small-3: factuality_faithfulness 0.62 < 0.7 (entry bar)
+  - gemma-3-27b-it: availability 1 < K=2 vendors at scale
+```
+
+The two exclusions show the two gates that make this *not* a leaderboard: one model is
+capable-but-too-weak on a required axis, the other is fine but not servable at scale.
+
+## Deferred on purpose
+
+v0 is reference-grade. These are settlement-grade hardening, added only when real money
+settles against the print:
+
+- Running the eval to **generate** fresh private scores (v0 consumes published scores).
+- Rotating held-out tasks + contamination canaries.
+- **Measured** realized cost-to-serve instead of list prices.
+- LLM-judge ensembles and multi-source availability-weighted robustness.
+
+See the original framing in [The OTE Price Index](/architecture/price-index) and the
+phasing in [System Architecture](/architecture/system-architecture).

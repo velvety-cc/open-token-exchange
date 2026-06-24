@@ -7,10 +7,19 @@
     "apps/*",
     "packages/*"
   ],
+  "comment:overrides": "Pin a single React (19.2.3) across the workspace. Without this, npm auto-installs next's React peer as the latest (19.2.7) at the @ote/web level, conflicting with the hoisted 19.2.3 and making the production build bundle two React copies (breaks static prerender of /404 and /_error).",
+  "overrides": {
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
   "scripts": {
     "docs": "npm run dev --workspace=@ote/docs",
     "docs:dev": "npm run dev --workspace=@ote/docs",
-    "docs:broken-links": "npm run broken-links --workspace=@ote/docs"
+    "docs:broken-links": "npm run broken-links --workspace=@ote/docs",
+    "web": "npm run dev --workspace=@ote/web",
+    "web:dev": "npm run dev --workspace=@ote/web",
+    "web:build": "npm run build --workspace=@ote/web",
+    "web:start": "npm run start --workspace=@ote/web"
   },
   "engines": {
     "node": ">=20"

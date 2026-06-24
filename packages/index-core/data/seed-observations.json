@@ -1,0 +1,67 @@
+{
+  "_note": "ILLUSTRATIVE seed data for the v0 engine demo. Scores and prices are plausible placeholders, NOT sourced or authoritative. Replace with real published-eval scores and current vendor list prices before any reference use. chars_per_token is the tokenizer normalization factor.",
+  "observations": [
+    {
+      "model": "deepseek/deepseek-v3.2",
+      "open_weight": true,
+      "chars_per_token": 3.8,
+      "scores": { "instruction_following": 0.86, "structured_output_validity": 0.90, "factuality_faithfulness": 0.80, "routine_code": 0.82, "long_context_retention": 0.80, "safety_refusal": 0.85 },
+      "endpoints": [
+        { "vendor": "deepinfra", "input_usd_per_m_tok": 0.27, "output_usd_per_m_tok": 0.40, "available_at_scale": true },
+        { "vendor": "novita", "input_usd_per_m_tok": 0.28, "output_usd_per_m_tok": 0.42, "available_at_scale": true },
+        { "vendor": "openrouter", "input_usd_per_m_tok": 0.28, "output_usd_per_m_tok": 0.40, "available_at_scale": true }
+      ]
+    },
+    {
+      "model": "meta-llama/llama-3.3-70b-instruct",
+      "open_weight": true,
+      "chars_per_token": 4.0,
+      "scores": { "instruction_following": 0.84, "structured_output_validity": 0.88, "factuality_faithfulness": 0.76, "routine_code": 0.74, "long_context_retention": 0.78, "safety_refusal": 0.90 },
+      "endpoints": [
+        { "vendor": "together", "input_usd_per_m_tok": 0.88, "output_usd_per_m_tok": 0.88, "available_at_scale": true },
+        { "vendor": "deepinfra", "input_usd_per_m_tok": 0.59, "output_usd_per_m_tok": 0.79, "available_at_scale": true },
+        { "vendor": "groq", "input_usd_per_m_tok": 0.59, "output_usd_per_m_tok": 0.79, "available_at_scale": true }
+      ]
+    },
+    {
+      "model": "qwen/qwen2.5-72b-instruct",
+      "open_weight": true,
+      "chars_per_token": 3.6,
+      "scores": { "instruction_following": 0.82, "structured_output_validity": 0.90, "factuality_faithfulness": 0.75, "routine_code": 0.80, "long_context_retention": 0.72, "safety_refusal": 0.88 },
+      "endpoints": [
+        { "vendor": "together", "input_usd_per_m_tok": 0.90, "output_usd_per_m_tok": 0.90, "available_at_scale": true },
+        { "vendor": "novita", "input_usd_per_m_tok": 0.76, "output_usd_per_m_tok": 0.76, "available_at_scale": true }
+      ]
+    },
+    {
+      "model": "zhipu/glm-4.6",
+      "open_weight": true,
+      "chars_per_token": 3.7,
+      "scores": { "instruction_following": 0.80, "structured_output_validity": 0.85, "factuality_faithfulness": 0.74, "routine_code": 0.72, "long_context_retention": 0.73, "safety_refusal": 0.82 },
+      "endpoints": [
+        { "vendor": "novita", "input_usd_per_m_tok": 0.60, "output_usd_per_m_tok": 2.20, "available_at_scale": true },
+        { "vendor": "openrouter", "input_usd_per_m_tok": 0.55, "output_usd_per_m_tok": 2.00, "available_at_scale": true }
+      ]
+    },
+    {
+      "model": "mistralai/mistral-small-3",
+      "open_weight": true,
+      "chars_per_token": 4.1,
+      "scores": { "instruction_following": 0.78, "structured_output_validity": 0.82, "factuality_faithfulness": 0.62, "routine_code": 0.72, "long_context_retention": 0.70, "safety_refusal": 0.90 },
+      "endpoints": [
+        { "vendor": "together", "input_usd_per_m_tok": 0.20, "output_usd_per_m_tok": 0.60, "available_at_scale": true },
+        { "vendor": "deepinfra", "input_usd_per_m_tok": 0.10, "output_usd_per_m_tok": 0.30, "available_at_scale": true }
+      ]
+    },
+    {
+      "model": "google/gemma-3-27b-it",
+      "open_weight": true,
+      "chars_per_token": 4.2,
+      "scores": { "instruction_following": 0.76, "structured_output_validity": 0.80, "factuality_faithfulness": 0.73, "routine_code": 0.71, "long_context_retention": 0.72, "safety_refusal": 0.90 },
+      "endpoints": [
+        { "vendor": "together", "input_usd_per_m_tok": 0.30, "output_usd_per_m_tok": 0.50, "available_at_scale": true },
+        { "vendor": "deepinfra", "input_usd_per_m_tok": 0.20, "output_usd_per_m_tok": 0.40, "available_at_scale": false }
+      ]
+    }
+  ]
+}

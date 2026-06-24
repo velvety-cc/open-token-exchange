@@ -1,0 +1,44 @@
+{
+  "symbol": "OTE-ECON-BATCH",
+  "method": "ote-idx@0.1.0",
+  "title": "Economy-batch, open-weight",
+  "universe": "open-weight",
+  "service_class": {
+    "name": "batch/best-effort",
+    "completion_within_h": 24,
+    "latency_sla": null
+  },
+  "reference_workload": {
+    "input_output_blend": 3,
+    "blend_note": "3:1 input:output. The unit is USD per 1M OUTPUT-equivalent units; producing 1M output consumes 3M input.",
+    "context_tokens": 8000,
+    "decoding": "unconstrained",
+    "samples_n": 5,
+    "statistic": "median",
+    "seeds_pinned": true
+  },
+  "reference_unit": "usd_per_1m_output_equivalent_chars",
+  "reference_unit_note": "Tokenizer-normalized: native per-token prices are divided by each model's chars_per_token so routes compare on delivered work, not token-count artifacts.",
+  "gating_axes": [
+    "instruction_following",
+    "structured_output_validity",
+    "factuality_faithfulness",
+    "routine_code",
+    "long_context_retention"
+  ],
+  "monitored_axes": [
+    "safety_refusal"
+  ],
+  "thresholds": {
+    "_note": "v0 PLACEHOLDERS. Calibrate T_in/T_out from a first baseline run over known-good economy models. Not settlement-grade. Per-axis overrides go alongside 'default'.",
+    "default": {
+      "t_in": 0.7,
+      "t_out": 0.65
+    }
+  },
+  "availability_gate_k": 2,
+  "review": {
+    "basket_cadence": "monthly",
+    "holdout_rotation": "monthly"
+  }
+}

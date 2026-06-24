@@ -1,0 +1,64 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { SECTIONS } from "./sections";
+
+export default function SideNav() {
+  const [active, setActive] = useState(SECTIONS[0].id);
+
+  useEffect(() => {
+    const els = SECTIONS.map((s) => document.getElementById(s.id)).filter(
+      Boolean
+    );
+    if (!els.length) return;
+
+    // Track which sections are currently intersecting; the topmost wins.
+    const visible = new Map();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) visible.set(e.target.id, e.intersectionRatio);
+          else visible.delete(e.target.id);
+        }
+        // Pick the visible section nearest the top of the viewport.
+        let top = null;
+        let topY = Infinity;
+        for (const id of visible.keys()) {
+          const y = document.getElementById(id).getBoundingClientRect().top;
+          if (y < topY) {
+            topY = y;
+            top = id;
+          }
+        }
+        if (top) setActive(top);
+      },
+      {
+        // Bias the active band to the upper third of the viewport.
+        rootMargin: "-15% 0px -70% 0px",
+        threshold: [0, 0.25, 0.5, 1],
+      }
+    );
+
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <nav className="sidenav" aria-label="Sections">
+      <ol>
+        {SECTIONS.map((s) => (
+          <li key={s.id}>
+            <a
+              href={`#${s.id}`}
+              className={active === s.id ? "active" : ""}
+              aria-current={active === s.id ? "true" : undefined}
+            >
+              <span className="n">{s.num}</span>
+              <span>{s.label}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}

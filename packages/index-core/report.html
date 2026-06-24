@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OTE-ECON-BATCH — index report</title>
+<style>
+  :root { --teal:#0E7C66; --teal-light:#3BC9A8; --ink:#0d1b16; --muted:#5b6b64; --line:#e3ece9; --bg:#f6f9f8; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 40px 24px 64px; }
+  h1 { font-size: 20px; margin:0; }
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing:.06em; color:var(--muted); margin: 36px 0 12px; }
+  .sub { color:var(--muted); margin: 4px 0 24px; font-size: 13px; }
+  .print { background: var(--teal); color:#fff; border-radius: 14px; padding: 28px; }
+  .print .num { font-size: 40px; font-weight: 700; letter-spacing:-.02em; }
+  .print .unit { opacity:.85; font-size: 14px; margin-top: 2px; }
+  .print .ctd { margin-top: 14px; font-size: 14px; opacity:.95; }
+  .print .ctd b { background: rgba(255,255,255,.18); padding: 2px 8px; border-radius: 6px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; }
+  .chip { background:#fff; border:1px solid var(--line); border-radius:999px; padding:5px 12px; font-size:13px; color:var(--muted); }
+  .chip b { color:var(--ink); font-weight:600; margin-right:4px; }
+  .route { margin: 10px 0; }
+  .route-label { font-size: 13px; margin-bottom: 4px; }
+  .route-label .vendor { color:var(--muted); }
+  .route-label .tag { background:var(--teal); color:#fff; font-size:10px; font-weight:700; padding:1px 6px; border-radius:5px; margin-left:8px; vertical-align:1px; }
+  .bar-wrap { display:flex; align-items:center; gap:10px; }
+  .bar { height: 22px; background: var(--teal-light); border-radius: 5px; min-width: 2px; }
+  .route.ctd .bar { background: var(--teal); }
+  .val { font-variant-numeric: tabular-nums; font-size: 13px; color:var(--muted); }
+  ul.basket { list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; gap:8px; }
+  ul.basket li { background:#fff; border:1px solid var(--line); border-radius:8px; padding:6px 12px; font-size:13px; }
+  ul.excluded { list-style:none; padding:0; margin:0; }
+  ul.excluded li { background:#fff; border:1px solid var(--line); border-left:3px solid #d98b8b; border-radius:8px; padding:8px 12px; margin-bottom:8px; font-size:13px; }
+  ul.excluded .reason { color:var(--muted); margin-left:10px; }
+  .muted { color:var(--muted); }
+  footer { margin-top:40px; padding-top:16px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; }
+  .warn { background:#fff7ed; border:1px solid #f3d9b5; color:#7a5320; border-radius:10px; padding:12px 14px; font-size:13px; margin-top:14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>OTE-ECON-BATCH <span class="muted">— Economy-batch, open-weight</span></h1>
+  <div class="sub">ote-idx@0.1.0 · computed 2026-06-22T05:29:53.088Z</div>
+
+  <div class="print">
+    <div class="num">$0.3184</div>
+    <div class="unit">USD per 1M output-equivalent characters (tokenizer-normalized)</div>
+    <div class="ctd">cheapest-to-deliver: <b>deepseek/deepseek-v3.2 @ deepinfra</b></div>
+  </div>
+
+  <h2>Band</h2>
+  <div class="chips">
+    <span class="chip"><b>universe</b> open-weight</span>
+    <span class="chip"><b>service</b> batch/best-effort</span>
+    <span class="chip"><b>workload</b> 3:1 in:out · 8k ctx · unconstrained</span>
+    <span class="chip"><b>availability K</b> 2</span>
+    <span class="chip"><b>thresholds</b> t_in 0.7 / t_out 0.65</span>
+    <span class="chip"><b>gating axes</b> 5</span>
+  </div>
+
+  <h2>Route ladder · cheapest-to-deliver first</h2>
+  <div class="route ctd">
+      <div class="route-label">deepseek/deepseek-v3.2 <span class="vendor">@ deepinfra</span><span class="tag">CTD</span></div>
+      <div class="bar-wrap"><div class="bar" style="width:29.5%"></div><span class="val">0.3184</span></div>
+    </div>
+<div class="route ">
+      <div class="route-label">deepseek/deepseek-v3.2 <span class="vendor">@ openrouter</span></div>
+      <div class="bar-wrap"><div class="bar" style="width:30.2%"></div><span class="val">0.3263</span></div>
+    </div>
+<div class="route ">
+      <div class="route-label">deepseek/deepseek-v3.2 <span class="vendor">@ novita</span></div>
+      <div class="bar-wrap"><div class="bar" style="width:30.7%"></div><span class="val">0.3316</span></div>
+    </div>
+<div class="route ">
+      <div class="route-label">meta-llama/llama-3.3-70b-instruct <span class="vendor">@ deepinfra</span></div>
+      <div class="bar-wrap"><div class="bar" style="width:59.2%"></div><span class="val">0.6400</span></div>
+    </div>
+<div class="route ">
+      <div class="route-label">meta-llama/llama-3.3-70b-instruct <span class="vendor">@ groq</span></div>
+      <div class="bar-wrap"><div class="bar" style="width:59.2%"></div><span class="val">0.6400</span></div>
+    </div>
+<div class="route ">
+      <div class="route-label">qwen/qwen2.5-72b-instruct <span class="vendor">@ novita</span></div>
+      <div class="bar-wrap"><div class="bar" style="width:78.1%"></div><span class="val">0.8444</span></div>
+    </div>
+<div class="route ">
+      <div class="route-label">meta-llama/llama-3.3-70b-instruct <span class="vendor">@ together</span></div>
+      <div class="bar-wrap"><div class="bar" style="width:81.4%"></div><span class="val">0.8800</span></div>
+    </div>
+<div class="route ">
+      <div class="route-label">zhipu/glm-4.6 <span class="vendor">@ openrouter</span></div>
+      <div class="bar-wrap"><div class="bar" style="width:91.2%"></div><span class="val">0.9865</span></div>
+    </div>
+<div class="route ">
+      <div class="route-label">qwen/qwen2.5-72b-instruct <span class="vendor">@ together</span></div>
+      <div class="bar-wrap"><div class="bar" style="width:92.5%"></div><span class="val">1.0000</span></div>
+    </div>
+<div class="route ">
+      <div class="route-label">zhipu/glm-4.6 <span class="vendor">@ novita</span></div>
+      <div class="bar-wrap"><div class="bar" style="width:100.0%"></div><span class="val">1.0811</span></div>
+    </div>
+
+  <h2>Qualifying basket (4)</h2>
+  <ul class="basket">
+    <li>deepseek/deepseek-v3.2</li>
+<li>meta-llama/llama-3.3-70b-instruct</li>
+<li>qwen/qwen2.5-72b-instruct</li>
+<li>zhipu/glm-4.6</li>
+  </ul>
+
+  <h2>Excluded · the gates that make this an oracle, not a leaderboard</h2>
+  <ul class="excluded">
+    <li><b>mistralai/mistral-small-3</b><span class="reason">factuality_faithfulness: 0.62 &lt; 0.7 (entry bar)</span></li>
+<li><b>google/gemma-3-27b-it</b><span class="reason">availability: 1 &lt; K=2 vendors at scale</span></li>
+  </ul>
+
+  <div class="warn"><b>Illustrative data.</b> ILLUSTRATIVE seed data for the v0 engine demo. Scores and prices are plausible placeholders, NOT sourced or authoritative. Replace with real published-eval scores and current vendor list prices before any reference use. chars_per_token is the tokenizer normalization factor.</div>
+
+  <footer>
+    Generated by <code>@ote/index-core</code> · reference-grade v0 · deterministic from published inputs + band config.
+  </footer>
+</div>
+</body>
+</html>

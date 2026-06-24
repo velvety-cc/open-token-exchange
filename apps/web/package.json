@@ -1,0 +1,17 @@
+{
+  "name": "@ote/web",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Open Token Exchange — marketing / investor landing page (Next.js)",
+  "scripts": {
+    "dev": "next dev -p 4311",
+    "build": "next build",
+    "start": "next start -p 4311",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^15",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  }
+}

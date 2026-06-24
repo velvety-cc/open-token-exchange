@@ -18,18 +18,21 @@ gated phases.
 
 Full reasoning and citations are in the docs.
 
-## Develop the docs
+## Develop
 
 ```bash
 npm install
-npm run docs        # mint dev — serves apps/docs locally
+npm run docs        # mint dev — serves the docs site (apps/docs) on :3000
+npm run web         # next dev — serves the landing page (apps/web) on :4311
 ```
 
 ## Layout
 
 ```
-apps/docs/          # @ote/docs — Mintlify research + architecture site (this is what exists today)
-packages/*          # planned, phase-by-phase (see apps/docs/architecture/monorepo.mdx)
+apps/docs/          # @ote/docs — Mintlify research + architecture site
+apps/web/           # @ote/web  — investor landing page (Next.js); see apps/web/README.md
+packages/index-core # @ote/index-core — the v0 price-index engine
+reference/          # source material (Xing 2026, arXiv:2603.21690)
 ```
 
 ## Structure of the docs

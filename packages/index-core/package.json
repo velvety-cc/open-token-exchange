@@ -1,0 +1,17 @@
+{
+  "name": "@ote/index-core",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "OTE index engine (v0) — capability-banded cheapest-to-deliver price index for economy-batch open-weight inference",
+  "main": "src/engine.js",
+  "bin": {
+    "ote-index": "src/cli.js"
+  },
+  "scripts": {
+    "print": "node src/cli.js",
+    "print:json": "node src/cli.js --json",
+    "report": "node src/report.js",
+    "test": "node --test"
+  }
+}
