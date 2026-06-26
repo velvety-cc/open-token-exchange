@@ -5,6 +5,34 @@ import { SECTIONS } from "./sections";
 
 export default function SideNav() {
   const [active, setActive] = useState(SECTIONS[0].id);
+  const [onDark, setOnDark] = useState(false);
+
+  // Invert the rail while it sits over the full-bleed dark "product" strip:
+  // toggle when that section spans the rail's vertical mid-line.
+  useEffect(() => {
+    const dark = document.getElementById("product");
+    const rail = document.querySelector(".sidenav ol") || document.querySelector(".sidenav");
+    if (!dark || !rail) return;
+    let raf = 0;
+    const check = () => {
+      raf = 0;
+      const r = rail.getBoundingClientRect();
+      const d = dark.getBoundingClientRect();
+      const mid = r.top + r.height / 2;
+      setOnDark(d.top <= mid && d.bottom >= mid);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(check);
+    };
+    check();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
 
   useEffect(() => {
     const els = SECTIONS.map((s) => document.getElementById(s.id)).filter(
@@ -44,7 +72,7 @@ export default function SideNav() {
   }, []);
 
   return (
-    <nav className="sidenav" aria-label="Sections">
+    <nav className={`sidenav${onDark ? " on-dark" : ""}`} aria-label="Sections">
       <ol>
         {SECTIONS.map((s) => (
           <li key={s.id}>

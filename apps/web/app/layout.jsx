@@ -1,4 +1,5 @@
 import "./globals.css";
+import { Toaster } from "../components/ui/sonner";
 
 export const metadata = {
   metadataBase: new URL("https://opentokenexchange.com"),
@@ -31,7 +32,10 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

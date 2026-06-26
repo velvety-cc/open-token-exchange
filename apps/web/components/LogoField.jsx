@@ -65,14 +65,7 @@ export default function LogoField() {
       particles = [];
       for (let i = 0; i < count; i++) {
         const p = spawn({});
-        // pre-spread along the spiral so the pattern is formed on first paint
-        const rr = Math.pow(rand(), 0.7) * p.maxR * 0.9;
-        const r0 = Math.max(2, scale * 0.01);
-        const ang =
-          Math.atan2(p.dy, p.dx) + p.spin * Math.log(Math.max(rr, r0) / r0);
-        p.x = cx + Math.cos(ang) * rr;
-        p.y = cy + Math.sin(ang) * rr;
-        p.life = 20 + rand() * 260;
+        p.life = rand() * p.maxLife;
         particles.push(p);
       }
     }
