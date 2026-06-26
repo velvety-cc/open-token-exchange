@@ -27,6 +27,9 @@
   --shell: 696px; /* col + horizontal padding */
   --nav-w: 158px;
   --nav-gap: 40px;
+  /* Multica-style symmetric section padding; the side rail anchors to it so the
+     nav's first item lines up with the first section's kicker */
+  --section-pad: clamp(80px, 8vw, 112px);
 
   /* shadcn semantic tokens, mapped to the brand */
   --radius: 0.7rem;
@@ -272,26 +275,26 @@ a {
 .shell {
   position: relative;
   max-width: var(--shell);
-  margin: 48px auto 0;
-  padding: 22px 28px 0;
+  margin: 0 auto;
+  padding: 0 28px;
 }
 
 /* nav is an absolute rail to the LEFT of the centered column;
    its inner list is sticky so it follows the scroll */
 .sidenav {
   position: absolute;
-  /* align the nav's first item with the first section's kicker
-     (shell padding-top 22 + section padding-top 18) */
-  top: 40px;
+  /* anchor the rail to the first section's kicker (same offset as the section
+     top padding), so the nav's first item lines up with chapter 1 */
+  top: var(--section-pad);
   left: calc(-1 * (var(--nav-w) + var(--nav-gap)));
   width: var(--nav-w);
-  height: calc(100% - 40px);
+  height: calc(100% - var(--section-pad));
   /* stay above the full-bleed dark strip, which would otherwise paint over it */
   z-index: 4;
 }
 .sidenav ol {
   position: sticky;
-  top: 40px;
+  top: var(--section-pad);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -360,13 +363,23 @@ main.col {
 }
 .section {
   position: relative;
-  padding: 18px 0 64px;
+  /* Multica-style symmetric section spacing: py-20 lg:py-28 (80px / 112px) */
+  padding: var(--section-pad) 0;
   border-top: 1px solid var(--line);
-  margin-top: 28px;
+  margin-top: 0;
 }
 .section:first-child {
   border-top: none;
-  margin-top: 0;
+}
+/* standardize the end spacing: every section ends with exactly its
+   padding-bottom, regardless of which block is last (pull quote, chart, stats,
+   table, etc.) by neutralizing the last in-flow element's bottom margin. */
+.section > *:last-child {
+  margin-bottom: 0;
+}
+/* no divider line where a section follows the full-bleed dark strip */
+#prices {
+  border-top: none;
 }
 .kicker {
   font-family: var(--mono);
@@ -848,50 +861,6 @@ strong {
   }
 }
 
-/* right-margin reference: a small figure + note pinned beside the body text on
-   wide screens (like the citation sidenotes), inline on narrow screens. */
-.ref-note {
-  margin: 30px 0 6px;
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
-}
-.ref-note-label {
-  display: block;
-  margin-bottom: 9px;
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: var(--brand-ink);
-}
-.ref-note img {
-  display: block;
-  width: 100%;
-  border-radius: 8px;
-  border: 1px solid var(--line-strong);
-}
-.ref-note p {
-  margin: 11px 0 0;
-  font-size: 12px;
-  line-height: 1.55;
-  color: var(--mut);
-}
-@media (min-width: 1101px) {
-  .ref-note {
-    position: absolute;
-    top: 6px;
-    left: 100%;
-    width: 182px;
-    margin: 0 0 0 38px;
-    border-top: none;
-    padding-top: 0;
-  }
-  .ref-note p {
-    font-size: 11.5px;
-    line-height: 1.5;
-  }
-}
-
 /* product section: a full-bleed dark strip spanning the whole viewport width.
    the design tokens are remapped to a dark surface, so the existing component
    styles (kicker, h2, grid, spec, tags) render light-on-dark with no rewrite.
@@ -902,7 +871,9 @@ strong {
   margin-left: calc(50% - 50vw);
   margin-top: 0;
   border-top: none;
-  padding: 52px clamp(24px, 6vw, 70px) 64px calc(50vw - 50%);
+  padding-block: var(--section-pad);
+  padding-left: calc(50vw - 50%);
+  padding-right: clamp(24px, 6vw, 70px);
   background: #14130f;
   --ink: #f5f2ea;
   --ink-2: #d4d1c7;

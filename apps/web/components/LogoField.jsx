@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 
 // Generative coral field, full-bleed across the hero. A faint dot-grid lattice
 // sits underneath; coral particles emanate from a single right-of-centre origin
-// (echoing the OTE logo's radial burst) and drift outward through a swirling
+// (echoing the Open Intelligence logo's radial burst) and drift outward through a swirling
 // flow field. Bimodal spread: most dots stay in a dense inner circle, a
 // minority reach a wide outer ring. Each particle carries a short finite trail;
 // the canvas is fully cleared every frame so traces vanish and dots stay crisp.

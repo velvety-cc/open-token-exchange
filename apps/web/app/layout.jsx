@@ -3,14 +3,14 @@ import { Toaster } from "../components/ui/sonner";
 
 export const metadata = {
   metadataBase: new URL("https://opentokenexchange.com"),
-  title: "Open Token Exchange · Futures Market for AI Inference",
+  title: "Open Intelligence | Market for Commoditized Intelligence",
   description:
-    "AI inference tokens are becoming a commodity. Open Token Exchange is building the price index and the instruments to hedge them, index-first: a redeemable voucher, then cash-settled futures.",
+    "AI inference tokens are becoming a commodity. Open Intelligence is building the price index and the instruments to hedge them, index-first: a redeemable voucher, then cash-settled futures.",
   icons: {
     icon: "/favicon.ico",
   },
   openGraph: {
-    title: "Open Token Exchange · Futures Market for AI Inference",
+    title: "Open Intelligence | Market for Commoditized Intelligence",
     description:
       "AI inference tokens are becoming a commodity. We're building the index and the instruments to hedge them.",
     type: "website",

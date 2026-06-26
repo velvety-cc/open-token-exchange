@@ -105,7 +105,7 @@ export default function TradeDialog({ mode = "buy", children }) {
     }
 
     // No backend wired yet: capture the intent and confirm.
-    console.log("[OTE trade request]", {
+    console.log("[Open Intelligence trade request]", {
       mode,
       email,
       amount: fd.get("amount"),

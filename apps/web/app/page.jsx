@@ -38,8 +38,8 @@ export default function Home() {
       <header className="topbar">
         <div className="topbar-inner">
           <a className="brand" href="#top">
-            <img src="/logo.svg" alt="Open Token Exchange" />
-            <span className="brand-name">Open Token Exchange</span>
+            <img src="/logo.svg" alt="Open Intelligence" />
+            <span className="brand-name">Open Intelligence</span>
           </a>
           <nav className="topnav">
             <a href="#commodity">Thesis</a>
@@ -57,8 +57,8 @@ export default function Home() {
           <h1>An open market for commoditized intelligence</h1>
           <p className="hero-sub">Intelligence is becoming a commodity.</p>
           <p className="hero-sub">
-            You can already see the shape of this market forming. The only
-            thing missing is the market itself.
+            You can already see the shape of this market forming. The only thing
+            missing is the market itself.
           </p>
           <div className="hero-cta">
             <TradeDialog mode="buy">
@@ -95,8 +95,9 @@ export default function Home() {
             </p>
             <h2>Intelligence is becoming a commodity.</h2>
             <p>
+              Today,{" "}
               <Term def="The cost of running the model every time someone asks it a question.">
-                Inference
+                inference
               </Term>{" "}
               has surpassed{" "}
               <Term def="The one-time price of teaching a model everything it knows.">
@@ -104,8 +105,7 @@ export default function Home() {
               </Term>{" "}
               to become AI&rsquo;s dominant cost,{" "}
               <Cite {...CITES[1]}>
-                approaching two-thirds of all compute, up from roughly a third
-                in 2023
+                approaching 60% of all compute, up from roughly 30% in 2023
               </Cite>
               .
             </p>
@@ -126,10 +126,10 @@ export default function Home() {
             <TokenVolumeChart />
 
             <p>
-              This shift turns the output of a model into something an
-              economist would recognize as a commodity. A unit of inference,
-              one million tokens, is now bought and sold much like a barrel of
-              oil or a kilowatt-hour of electricity.
+              This shift turns the output of a model into something an economist
+              would recognize as a commodity. A unit of inference, one million
+              tokens, is now bought and sold much like a barrel of oil or a
+              kilowatt-hour of electricity.
             </p>
             <p className="pull">
               We are standing at the cusp of commoditized intelligence.
@@ -150,23 +150,9 @@ export default function Home() {
             <p>
               In every other commodity market, that exact situation calls for a
               futures market: a way to agree today on the price you will pay
-              tomorrow. For oil, electricity, and carbon, such markets exist. For
-              intelligence, none does.
+              tomorrow. For oil, electricity, and carbon, such markets exist.
             </p>
-            <aside className="ref-note">
-              <span className="ref-note-label">Precedent</span>
-              <img
-                src="/dojima-exchange.jpg"
-                alt="Woodblock print of the Dōjima Rice Exchange in Osaka"
-              />
-              <p>
-                In 1730, rice merchants in Osaka opened the Dōjima Rice Exchange,
-                the first organized futures market in history: rice was essential
-                and its price was unmanageable. Standardized receipts turned a
-                chaotic spot market into a place to lock tomorrow&rsquo;s price
-                today. The same logic later tamed oil, electricity, and carbon.
-              </p>
-            </aside>
+            <p>For intelligence, none does.</p>
           </section>
 
           {/* III - the product */}
@@ -179,9 +165,9 @@ export default function Home() {
               <span className="h2-dim">One market for intelligence.</span>
             </h2>
             <p className="lede">
-              An open futures market needs two things that build on each other: a
-              public price for a unit of intelligence, and a place to trade that
-              price forward. We are building both.
+              An open futures market needs two things that build on each other:
+              a public price for a unit of intelligence, and a place to trade
+              that price forward. We are building both.
             </p>
 
             <div className="prod-grid">
@@ -196,9 +182,9 @@ export default function Home() {
                   <strong>Standard Inference Token</strong> (SIT) normalizes one
                   unit of model output to a fixed capability bar, so stronger
                   models count for proportionally more. The{" "}
-                  <strong>Token Price Index</strong> (TPI) is the volume-weighted
-                  average of what qualified providers charge for it, with no
-                  single provider allowed to dominate the figure.
+                  <strong>Token Price Index</strong> (TPI) is the
+                  volume-weighted average of what qualified providers charge for
+                  it, with no single provider allowed to dominate the figure.
                 </p>
                 <div className="prod-detail">
                   <p className="prod-detail-head">
@@ -504,8 +490,7 @@ export default function Home() {
                 <div className="ph">1</div>
                 <div>
                   <h4>
-                    Match by hand{" "}
-                    <span className="tag good">Building now</span>
+                    Match by hand <span className="tag good">Building now</span>
                   </h4>
                   <p>
                     Today the market is thin and sell-biased: with prices still
@@ -572,7 +557,7 @@ export default function Home() {
             <div className="foot-brand">
               <div className="fb">
                 <img src="/logo.svg" alt="" />
-                <span>Open Token Exchange</span>
+                <span>Open Intelligence</span>
               </div>
               <p>Standing at the cusp of commoditized intelligence.</p>
             </div>
@@ -584,7 +569,7 @@ export default function Home() {
             </div>
           </div>
           <div className="foot-bottom">
-            <span>© 2026 Open Token Exchange. All rights reserved.</span>
+            <span>© 2026 Open Intelligence. All rights reserved.</span>
           </div>
         </div>
       </footer>
