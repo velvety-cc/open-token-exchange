@@ -40,9 +40,6 @@ export default function Home() {
             <span className="brand-name">Open Intelligence</span>
           </a>
           <nav className="topnav">
-            <a href="#commodity">Thesis</a>
-            <a href="#product">Product</a>
-            <a href="#build">Roadmap</a>
             <a href="/blog">Blog</a>
             <a href="mailto:liam@velvety.cc">Contact</a>
           </nav>
