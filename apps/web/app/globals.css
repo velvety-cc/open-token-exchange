@@ -1186,6 +1186,20 @@ strong {
 }
 
 /* ---------- blog (index + post) ---------- */
+/* full-height page on the warm hero band; shell grows so the footer pins
+   to the bottom even when the post list is short */
+.blog-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--bg);
+}
+.blog-page .shell {
+  flex: 1 0 auto;
+}
+.blog-page .foot {
+  margin-top: 0;
+}
 .post-head {
   padding-top: var(--section-pad);
   max-width: 46rem;
