@@ -1,5 +1,6 @@
 import SupplyDemandChart from "../../../components/SupplyDemandChart";
 import TokenPriceChart from "../../../components/TokenPriceChart";
+import Footer from "../../../components/Footer";
 
 export const metadata = {
   title: "Why the price of intelligence will swing | Open Intelligence",
@@ -9,7 +10,7 @@ export const metadata = {
 
 export default function Post() {
   return (
-    <>
+    <div className="blog-page">
       {/* top bar (tiny, non-sticky) */}
       <header className="topbar">
         <div className="topbar-inner">
@@ -265,14 +266,7 @@ export default function Post() {
         </main>
       </div>
 
-      {/* footer */}
-      <footer className="foot">
-        <div className="foot-inner">
-          <div className="foot-bottom">
-            <span>© 2026 Open Intelligence. All rights reserved.</span>
-          </div>
-        </div>
-      </footer>
-    </>
+      <Footer />
+    </div>
   );
 }
