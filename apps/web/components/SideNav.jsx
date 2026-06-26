@@ -14,12 +14,31 @@ export default function SideNav() {
     const rail = document.querySelector(".sidenav ol") || document.querySelector(".sidenav");
     if (!dark || !rail) return;
     let raf = 0;
+    const navEl = rail.closest(".sidenav") || rail;
+    const firstSection = document.querySelector(".section");
     const check = () => {
       raf = 0;
       const r = rail.getBoundingClientRect();
       const d = dark.getBoundingClientRect();
       const mid = r.top + r.height / 2;
       setOnDark(d.top <= mid && d.bottom >= mid);
+
+      // vertical position: level with chapter 1 at the top of the content, then
+      // drifting down to the upper-middle of the viewport once scrolled
+      if (firstSection) {
+        const pad = parseFloat(getComputedStyle(firstSection).paddingTop) || 100;
+        const settled = Math.max(pad, window.innerHeight * 0.35 - r.height / 2);
+        const contentTop =
+          firstSection.getBoundingClientRect().top + window.scrollY;
+        const progress = Math.min(
+          1,
+          Math.max(0, (window.scrollY - contentTop) / 360)
+        );
+        navEl.style.setProperty(
+          "--nav-top",
+          `${pad + (settled - pad) * progress}px`
+        );
+      }
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(check);

@@ -12,7 +12,11 @@ const CORAL = "253, 99, 65"; // --accent
 const TRAIL = 9; // trail length (frames of history)
 const EMIT = 0.3; // global emission speed (1 = original); slows the whole field
 
-export default function LogoField() {
+export default function LogoField({
+  className = "logo-field",
+  originX = 0.76,
+  originY = 0.5,
+}) {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -111,8 +115,10 @@ export default function LogoField() {
       canvas.width = Math.max(1, Math.round(w * dpr));
       canvas.height = Math.max(1, Math.round(h * dpr));
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      cx = w * 0.76;
-      cy = h * 0.5;
+      // desktop puts the burst right-of-centre (copy sits on the left); once the
+      // hero stacks on mobile, the field is a full-width block so centre it.
+      cx = w * (w <= 720 ? 0.5 : originX);
+      cy = h * originY;
       scale = Math.min(w, h);
       step = Math.max(22, Math.round(scale * 0.05));
       cols = Math.ceil(w / step);
@@ -208,7 +214,7 @@ export default function LogoField() {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", onResize);
     };
-  }, []);
+  }, [originX, originY]);
 
-  return <canvas ref={ref} className="logo-field" aria-hidden="true" />;
+  return <canvas ref={ref} className={className} aria-hidden="true" />;
 }

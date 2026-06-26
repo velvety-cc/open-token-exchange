@@ -294,7 +294,9 @@ a {
 }
 .sidenav ol {
   position: sticky;
-  top: var(--section-pad);
+  /* JS drives --nav-top from the chapter-1 kicker level (at the top) down to the
+     upper-middle of the viewport (once scrolled). falls back to ~35vh. */
+  top: var(--nav-top, calc(35vh - 108px));
   list-style: none;
   margin: 0;
   padding: 0;
@@ -1015,14 +1017,52 @@ strong {
 
 /* ---------- footer ---------- */
 .foot {
+  position: relative;
+  overflow: hidden;
+  /* ~40% taller than the prior content-driven height (≈285px → 400px) */
+  min-height: 400px;
   margin-top: 80px;
   background: #14130f;
   color: #cfccc2;
+  display: flex;
+  flex-direction: column;
+}
+/* coral field echoing the hero, anchored to the bottom-right corner */
+.foot-field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  /* keep the burst in the corner: fade out toward the top-left so it never
+     crowds the footer copy */
+  -webkit-mask-image: radial-gradient(
+    120% 120% at 100% 100%,
+    #000 0%,
+    rgba(0, 0, 0, 0.55) 34%,
+    transparent 60%
+  );
+  mask-image: radial-gradient(
+    120% 120% at 100% 100%,
+    #000 0%,
+    rgba(0, 0, 0, 0.55) 34%,
+    transparent 60%
+  );
 }
 .foot-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
   max-width: 1080px;
   margin: 0 auto;
-  padding: 56px 28px 40px;
+  /* footer height +40%: vertical padding 56/40 → 78/56; bottom −20% → 44.8 */
+  padding: 78px 28px 44.8px;
+  /* fill the taller footer so the copyright bar can sit at the bottom */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 .foot-top {
   display: flex;
@@ -1030,7 +1070,6 @@ strong {
   gap: 40px;
   flex-wrap: wrap;
   padding-bottom: 36px;
-  border-bottom: 1px solid #2a2823;
 }
 .foot-brand {
   max-width: 320px;
@@ -1083,6 +1122,10 @@ strong {
   color: var(--brand);
 }
 .foot-bottom {
+  /* extra height from min-height pools above this, pinning it to the bottom;
+     the divider travels down with the copyright */
+  margin-top: auto;
+  border-top: 1px solid #2a2823;
   padding-top: 24px;
   display: flex;
   justify-content: space-between;
@@ -1100,22 +1143,26 @@ strong {
   }
 }
 @media (max-width: 860px) {
+  /* stack like a mobile cover: animation on top, then headline + copy below */
   .hero {
-    min-height: 74vh;
-    padding-top: 44px;
+    flex-direction: column;
+    align-items: stretch;
+    min-height: auto;
+    padding: 16px clamp(20px, 5vw, 72px) 56px;
+    gap: 12px;
   }
   .hero-copy {
     max-width: none;
   }
-  /* field sits behind the copy; fade it down so text stays legible */
+  /* field becomes a block at the top of the stack, fading into the copy below */
   .logo-field {
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      transparent 38%,
-      #000 78%
-    );
-    mask-image: linear-gradient(to bottom, transparent 38%, #000 78%);
-    opacity: 0.7;
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: clamp(280px, 44vh, 420px);
+    opacity: 1;
+    -webkit-mask-image: linear-gradient(to bottom, #000 66%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 66%, transparent 100%);
   }
 }
 @media (max-width: 640px) {
@@ -1136,4 +1183,96 @@ strong {
   .cmp td {
     padding: 7px 6px;
   }
+}
+
+/* ---------- blog (index + post) ---------- */
+.post-head {
+  padding-top: var(--section-pad);
+  max-width: 46rem;
+}
+.post-eyebrow {
+  margin: 0 0 18px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brand-ink);
+}
+.post-eyebrow a {
+  text-decoration: none;
+}
+.post-eyebrow a:hover {
+  text-decoration: underline;
+}
+.post-head h1 {
+  margin: 0 0 18px;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(34px, 4.4vw, 50px);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.post-sub {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+.post-list {
+  list-style: none;
+  margin: 52px 0 var(--section-pad);
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.post-list li {
+  border-bottom: 1px solid var(--line);
+}
+.post-list a {
+  display: block;
+  padding: 28px 0;
+  text-decoration: none;
+  color: var(--ink);
+}
+.post-list-meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.post-list h3 {
+  margin: 9px 0 8px;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 25px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.post-list a:hover h3 {
+  color: var(--brand-ink);
+}
+.post-list p {
+  margin: 0 0 12px;
+  max-width: 44rem;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--mut);
+}
+.post-list-more {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--brand-ink);
+}
+.post-cta {
+  margin-top: 22px;
+  font-size: 15px;
+  color: var(--mut);
+}
+.post-cta a {
+  color: var(--brand-ink);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--brand) 40%, transparent);
+  text-underline-offset: 2px;
 }

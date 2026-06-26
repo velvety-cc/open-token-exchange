@@ -4,8 +4,5 @@ export const SECTIONS = [
   { id: "commodity", num: "01", label: "A new commodity" },
   { id: "instrument", num: "02", label: "The problem" },
   { id: "product", num: "03", label: "The product" },
-  { id: "prices", num: "04", label: "Why prices move" },
-  { id: "inventory", num: "05", label: "No inventory" },
-  { id: "evidence", num: "06", label: "The hedge" },
-  { id: "build", num: "07", label: "Roadmap" },
+  { id: "build", num: "04", label: "Roadmap" },
 ];
